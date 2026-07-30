@@ -4,8 +4,7 @@ An AI-powered career transition platform that helps homemakers, immigrants,
 long-term unemployed individuals, and 40+ career changers identify realistic
 career paths, close skill gaps, and return to the workforce.
 
-This is a **single-file, clickable HTML prototype** in the style of
-[roadmap.sh](https://roadmap.sh) — no build step, no dependencies.
+This is a **single-file, clickable HTML prototype** — no build step, no dependencies.
 
 ## Run it
 
