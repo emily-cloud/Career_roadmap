@@ -1433,6 +1433,58 @@
       font-family: 'Bricolage Grotesque', ui-sans-serif, sans-serif;
       flex-shrink: 0;
       user-select: none;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .avatar svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .avatar-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .avatar-choice {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--edge);
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform .1s ease;
+    }
+
+    .avatar-choice svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .avatar-choice:hover {
+      transform: translate(-1px, -1px);
+    }
+
+    .avatar-choice.selected {
+      box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--mint);
+      transform: scale(1.05);
+    }
+
+    .shuffle-btn {
+      border: none;
+      background: none;
+      color: var(--mint-deep);
+      font-size: .78rem;
+      font-weight: 700;
+      text-decoration: underline;
+      padding: 4px 0;
     }
 
     .avatar-sm {
@@ -1448,10 +1500,41 @@
       box-shadow: 3px 3px 0 var(--edge);
     }
 
-    #navAccount {
+    .nav a.navlink#navAccount {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
+      background: var(--mint);
+      color: #14231D;
+      border: 2px solid var(--edge);
+      border-radius: 99px;
+      box-shadow: 3px 3px 0 var(--edge);
+      padding: 10px 18px;
+      font-size: .95rem;
+      font-weight: 800;
+      margin-left: 6px;
+      transition: transform .1s ease, box-shadow .1s ease;
+    }
+
+    .nav a.navlink#navAccount:hover {
+      background: var(--mint);
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--edge);
+    }
+
+    .nav a.navlink#navAccount:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0 var(--edge);
+    }
+
+    .nav a.navlink#navAccount.active {
+      background: var(--mint);
+    }
+
+    #navAccount .nav-flag {
+      width: 15px;
+      height: 17px;
+      flex-shrink: 0;
     }
 
     .swatch-row {
@@ -1922,24 +2005,59 @@
       return "x" + h;
     }
     const AVATAR_COLORS = ["#4EC7A5", "#F7C948", "#8FD675", "#7BA8F0", "#F0A175", "#C9A0EA"];
-    function avatarColor(u) {
-      if (u.color) return u.color;
-      let h = 0;
-      for (const c of u.email) h = (h * 31 + c.charCodeAt(0)) | 0;
-      return AVATAR_COLORS[Math.abs(h) % AVATAR_COLORS.length];
+    const SKIN_TONES = ["#F5D0A9", "#EAB98B", "#C68B59", "#8D5A3B", "#5C3A21"];
+    const HAIR_COLORS = ["#2E2A25", "#5B3A1E", "#8C6239", "#C9A227", "#767676", "#B84C3F"];
+    function rngFrom(seed) {
+      let h = 1779033703 ^ seed.length;
+      for (let i = 0; i < seed.length; i++) {
+        h = Math.imul(h ^ seed.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+      }
+      return function () {
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return ((h ^= h >>> 16) >>> 0) / 4294967296;
+      };
     }
+    function avatarSvg(seed) {
+      const r = rngFrom(String(seed));
+      const pick = a => a[Math.floor(r() * a.length)];
+      const bg = pick(AVATAR_COLORS), skin = pick(SKIN_TONES), hairC = pick(HAIR_COLORS);
+      const hairStyle = Math.floor(r() * 5), happyEyes = r() < .4, bigSmile = r() < .5;
+      const glasses = r() < .3, blush = r() < .5;
+      const ink = "#1E2B26";
+      let hair = "";
+      if (hairStyle === 0) hair = `<path d="M17 33 A15.4 15.4 0 0 1 47 33 L43 33 A11 11 0 0 0 21 33 Z" fill="${hairC}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>`;
+      else if (hairStyle === 1) hair = `<path d="M17 33 A15.4 15.4 0 0 1 47 33 L47 50 L41 50 L41 33 A11 11 0 0 0 23 33 L23 50 L17 50 Z" fill="${hairC}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>`;
+      else if (hairStyle === 2) hair = `<circle cx="32" cy="17" r="5.5" fill="${hairC}" stroke="${ink}" stroke-width="2"/><path d="M17 33 A15.4 15.4 0 0 1 47 33 L43 33 A11 11 0 0 0 21 33 Z" fill="${hairC}" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>`;
+      else if (hairStyle === 3) hair = `<circle cx="21.5" cy="25" r="6" fill="${hairC}" stroke="${ink}" stroke-width="2"/><circle cx="42.5" cy="25" r="6" fill="${hairC}" stroke="${ink}" stroke-width="2"/><circle cx="32" cy="20.5" r="6.5" fill="${hairC}" stroke="${ink}" stroke-width="2"/>`;
+      /* style 4: no hair */
+      const eyes = happyEyes
+        ? `<path d="M24 35.5 q2.5 -3 5 0 M35 35.5 q2.5 -3 5 0" fill="none" stroke="${ink}" stroke-width="1.9" stroke-linecap="round"/>`
+        : `<circle cx="26.5" cy="35" r="1.9" fill="${ink}"/><circle cx="37.5" cy="35" r="1.9" fill="${ink}"/>`;
+      const mouth = bigSmile
+        ? `<path d="M26.5 41 Q32 47 37.5 41 Z" fill="#fff" stroke="${ink}" stroke-width="1.9" stroke-linejoin="round"/>`
+        : `<path d="M27 41.5 Q32 45.5 37 41.5" fill="none" stroke="${ink}" stroke-width="2" stroke-linecap="round"/>`;
+      const extras =
+        (glasses ? `<circle cx="26.5" cy="35" r="4.6" fill="none" stroke="${ink}" stroke-width="1.7"/><circle cx="37.5" cy="35" r="4.6" fill="none" stroke="${ink}" stroke-width="1.7"/><path d="M31.1 35 h1.8 M21.9 34.4 l-4.4 -1.2 M42.1 34.4 l4.4 -1.2" stroke="${ink}" stroke-width="1.7" stroke-linecap="round"/>` : "") +
+        (blush ? `<circle cx="23" cy="39.5" r="2" fill="#E58F65" opacity=".55"/><circle cx="41" cy="39.5" r="2" fill="#E58F65" opacity=".55"/>` : "");
+      return `<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="${bg}"/><circle cx="32" cy="36" r="15" fill="${skin}" stroke="${ink}" stroke-width="2"/>${hair}${eyes}${mouth}${extras}</svg>`;
+    }
+    function avatarSeed(u) { return u.avatar || "e:" + u.email; }
     function initialsOf(name) {
       const parts = name.trim().split(/\s+/);
       return ((parts[0] || " ")[0] + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();
     }
     function avatarHtml(u, cls) {
-      return `<span class="avatar ${cls}" style="background:${avatarColor(u)}" aria-hidden="true">${esc(initialsOf(u.name))}</span>`;
+      return `<span class="avatar ${cls}" aria-hidden="true">${avatarSvg(avatarSeed(u))}</span>`;
     }
     function updateNavAccount() {
       const el = document.getElementById("navAccount");
       if (!el) return;
       const u = currentUser();
-      el.innerHTML = u ? avatarHtml(u, "avatar-sm") + esc(u.name.split(" ")[0]) : "Sign in";
+      el.innerHTML = u
+        ? avatarHtml(u, "avatar-sm") + esc(u.name.split(" ")[0])
+        : `<svg class="nav-flag" viewBox="0 0 15 17" aria-hidden="true"><line x1="2" y1="1.5" x2="2" y2="15.5" stroke="#14231D" stroke-width="2.4" stroke-linecap="round"></line><polygon points="4.2,1.8 13.5,4.9 4.2,8" fill="var(--gold)" stroke="#14231D" stroke-width="1.3" stroke-linejoin="round"></polygon></svg>Sign in`;
     }
 
     /* ---------- Utilities ---------- */
@@ -2525,8 +2643,9 @@
             <input id="reg-email" type="email" required placeholder="you@example.com"></div>
           <div class="field" style="margin-bottom:10px"><label for="reg-pw">Password</label>
             <input id="reg-pw" type="password" required minlength="6" placeholder="At least 6 characters"></div>
-          <div class="field" style="margin-bottom:10px"><label>Avatar color</label>
-            <div class="swatch-row" id="swatchRow" role="radiogroup" aria-label="Avatar color"></div></div>
+          <div class="field" style="margin-bottom:10px"><label>Choose your avatar</label>
+            <div class="avatar-grid" id="avatarGrid" role="radiogroup" aria-label="Avatar"></div>
+            <button type="button" class="shuffle-btn" id="shuffleAvatars">Shuffle avatars</button></div>
           <div class="field" style="margin-bottom:10px"><label for="reg-sit">Your situation</label>
             <select id="reg-sit">
               <option value="">I'll decide later</option>
@@ -2552,24 +2671,32 @@
     </div>
     <p class="muted" style="font-size:.75rem;margin-top:14px">Prototype note: accounts are stored only in this browser (local storage), so use a throwaway password.</p>
   </div>`;
-      let regColor = AVATAR_COLORS[0];
-      const swatchRow = document.getElementById("swatchRow");
-      AVATAR_COLORS.forEach((c, i) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "swatch" + (i === 0 ? " selected" : "");
-        b.style.background = c;
-        b.setAttribute("role", "radio");
-        b.setAttribute("aria-checked", i === 0 ? "true" : "false");
-        b.setAttribute("aria-label", "Avatar color " + (i + 1));
-        b.addEventListener("click", () => {
-          regColor = c;
-          swatchRow.querySelectorAll(".swatch").forEach(s => { s.classList.remove("selected"); s.setAttribute("aria-checked", "false"); });
-          b.classList.add("selected");
-          b.setAttribute("aria-checked", "true");
-        });
-        swatchRow.appendChild(b);
-      });
+      let regSeed = null;
+      const avatarGrid = document.getElementById("avatarGrid");
+      function dealAvatars() {
+        avatarGrid.innerHTML = "";
+        regSeed = null;
+        for (let i = 0; i < 8; i++) {
+          const seed = "a" + Math.random().toString(36).slice(2, 10);
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "avatar-choice" + (i === 0 ? " selected" : "");
+          b.innerHTML = avatarSvg(seed);
+          b.setAttribute("role", "radio");
+          b.setAttribute("aria-checked", i === 0 ? "true" : "false");
+          b.setAttribute("aria-label", "Avatar option " + (i + 1));
+          if (i === 0) regSeed = seed;
+          b.addEventListener("click", () => {
+            regSeed = seed;
+            avatarGrid.querySelectorAll(".avatar-choice").forEach(s => { s.classList.remove("selected"); s.setAttribute("aria-checked", "false"); });
+            b.classList.add("selected");
+            b.setAttribute("aria-checked", "true");
+          });
+          avatarGrid.appendChild(b);
+        }
+      }
+      dealAvatars();
+      document.getElementById("shuffleAvatars").addEventListener("click", dealAvatars);
       document.getElementById("regForm").addEventListener("submit", async e => {
         e.preventDefault();
         const name = document.getElementById("reg-name").value.trim();
@@ -2580,7 +2707,7 @@
         }
         const pw = await hashPw(document.getElementById("reg-pw").value);
         const users = getUsers();
-        users.push({ name, email, pw, situation: sit, color: regColor });
+        users.push({ name, email, pw, situation: sit, avatar: regSeed });
         saveUsers(users);
         store.set("session", email);
         updateNavAccount();
