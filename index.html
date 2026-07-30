@@ -212,10 +212,21 @@
     }
 
     .logo-mark {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       display: block;
       flex-shrink: 0;
+      filter: drop-shadow(0 1px 2px rgba(14, 124, 102, .35));
+    }
+
+    .logo-word {
+      font-size: 1.12rem;
+      letter-spacing: -.02em;
+    }
+
+    .logo-word em {
+      font-style: normal;
+      color: var(--accent);
     }
 
     .logo:hover .logo-mark .logo-node {
@@ -1064,12 +1075,11 @@
 
   <header class="site">
     <div class="wrap nav">
-      <a class="logo" href="#home"><svg class="logo-mark" viewBox="0 0 32 32" role="img" aria-label="Career Navigator logo">
-        <rect x="0" y="0" width="32" height="32" rx="9" fill="var(--accent)"></rect>
-        <path d="M8.5 23.5 C 16 23.5, 12.5 13.5, 19 11.5" fill="none" stroke="var(--accent-ink)" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="0.2 4.6"></path>
-        <circle cx="8.5" cy="23.5" r="2.4" fill="var(--accent-ink)"></circle>
-        <circle class="logo-node" cx="22.5" cy="10" r="4.4" fill="var(--node)" stroke="var(--node-border)" stroke-width="1.6"></circle>
-      </svg>Career Navigator</a>
+      <a class="logo" href="#home"><svg class="logo-mark" viewBox="0 0 36 36" role="img" aria-label="Career Navigator logo">
+        <rect x="0" y="0" width="36" height="36" rx="10" fill="var(--accent)"></rect>
+        <polyline points="7,27.5 13.5,21 18,25.5 24.5,17.5" fill="none" stroke="var(--accent-ink)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        <polygon class="logo-node" points="30.5,10.5 28.4,19.3 21.7,12.6" fill="var(--node)" stroke="var(--node-border)" stroke-width="1.7" stroke-linejoin="round"></polygon>
+      </svg><span class="logo-word">Career&nbsp;<em>Navigator</em></span></a>
       <a class="navlink" data-route="home" href="#home">Home</a>
       <a class="navlink" data-route="roadmaps" href="#roadmaps">Roadmaps</a>
       <a class="navlink" data-route="assessment" href="#assessment">Assessment</a>
