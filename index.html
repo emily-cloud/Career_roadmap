@@ -211,9 +211,12 @@
     }
 
     mark.hl {
-      background: linear-gradient(transparent 62%, var(--gold) 62%, var(--gold) 94%, transparent 94%);
-      color: inherit;
-      padding: 0 .08em;
+      background: var(--gold);
+      color: #241F0E;
+      padding: .02em .14em;
+      border-radius: .14em;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
     }
 
     :focus-visible {
@@ -1288,10 +1291,11 @@
       to { opacity: .65; }
     }
 
-    .mini-flag {
+    .mini-map svg.mini-flag {
       position: absolute;
-      width: 26px;
-      height: 30px;
+      inset: auto;
+      width: 30px;
+      height: 34px;
       animation: flagIn .45s cubic-bezier(.2, .9, .3, 1.4) 1.35s backwards;
     }
 
@@ -1412,7 +1416,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       .mini-map svg path { opacity: .65; }
-      .mini-flag { opacity: 1; }
+      .mini-map svg.mini-flag { opacity: 1; }
       .journey-viz .jv-line { stroke-dashoffset: 0; }
       .journey-viz .jv-pt { opacity: 1; }
     }
