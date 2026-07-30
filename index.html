@@ -1,771 +1,1557 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Career Navigator — AI roadmaps back to work</title>
-<style>
-  /* ============ Tokens ============ */
-  :root{
-    --bg:#ffffff;
-    --bg-soft:#f5f4ef;
-    --ink:#232936;
-    --muted:#5c6570;
-    --line:#e4e2d9;
-    --accent:#0e7c66;
-    --accent-soft:#e3f0ec;
-    --accent-ink:#ffffff;
-    --node:#ffe985;
-    --node-alt:#fff6cf;
-    --node-border:#2f2f2f;
-    --node-ink:#262620;
-    --wire:#2b78e4;
-    --card:#ffffff;
-    --tip-bg:#ecf5f1;
-    --done:#1d9e6f;
-    --shadow:0 1px 2px rgba(35,41,54,.06),0 8px 24px rgba(35,41,54,.07);
-  }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#14171c; --bg-soft:#1a1e25; --ink:#e8eaed; --muted:#9aa3ad;
-      --line:#2b303a; --accent:#2fbf9a; --accent-soft:#173029; --accent-ink:#0d1512;
-      --node:#f2d95c; --node-alt:#4a4325; --node-border:#0c0c0c;
-      --wire:#5b93e8; --card:#1a1e25; --tip-bg:#16302a; --done:#3fd598;
-      --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Navigator — AI roadmaps back to work</title>
+  <style>
+    /* ============ Tokens ============ */
+    :root {
+      --bg: #ffffff;
+      --bg-soft: #f5f4ef;
+      --ink: #232936;
+      --muted: #5c6570;
+      --line: #e4e2d9;
+      --accent: #0e7c66;
+      --accent-soft: #e3f0ec;
+      --accent-ink: #ffffff;
+      --node: #ffe985;
+      --node-alt: #fff6cf;
+      --node-border: #2f2f2f;
+      --node-ink: #262620;
+      --wire: #2b78e4;
+      --card: #ffffff;
+      --tip-bg: #ecf5f1;
+      --done: #1d9e6f;
+      --shadow: 0 1px 2px rgba(35, 41, 54, .06), 0 8px 24px rgba(35, 41, 54, .07);
     }
-  }
-  :root[data-theme="dark"]{
-    --bg:#14171c; --bg-soft:#1a1e25; --ink:#e8eaed; --muted:#9aa3ad;
-    --line:#2b303a; --accent:#2fbf9a; --accent-soft:#173029; --accent-ink:#0d1512;
-    --node:#f2d95c; --node-alt:#4a4325; --node-border:#0c0c0c;
-    --wire:#5b93e8; --card:#1a1e25; --tip-bg:#16302a; --done:#3fd598;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
-  }
-  :root[data-theme="light"]{
-    --bg:#ffffff; --bg-soft:#f5f4ef; --ink:#232936; --muted:#5c6570;
-    --line:#e4e2d9; --accent:#0e7c66; --accent-soft:#e3f0ec; --accent-ink:#ffffff;
-    --node:#ffe985; --node-alt:#fff6cf; --node-border:#2f2f2f; --node-ink:#262620;
-    --wire:#2b78e4; --card:#ffffff; --tip-bg:#ecf5f1; --done:#1d9e6f;
-    --shadow:0 1px 2px rgba(35,41,54,.06),0 8px 24px rgba(35,41,54,.07);
-  }
-  :root[data-theme="dark"]{ --node-ink:#262620; }
 
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    background:var(--bg); color:var(--ink);
-    font:16px/1.6 "Avenir Next","Segoe UI","Helvetica Neue",ui-sans-serif,system-ui,sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
-  a{color:var(--accent)}
-  button{font:inherit;cursor:pointer}
-  h1,h2,h3{line-height:1.15;text-wrap:balance;margin:0 0 .5rem}
-  h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:800;letter-spacing:-.02em}
-  h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;letter-spacing:-.015em}
-  h3{font-size:1.08rem;font-weight:700}
-  p{margin:.35rem 0 1rem}
-  .muted{color:var(--muted)}
-  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
-  .eyebrow{
-    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-    font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--accent);margin:0 0 .6rem;
-  }
-  :focus-visible{outline:2px solid var(--wire);outline-offset:2px;border-radius:4px}
-  @media (prefers-reduced-motion: reduce){
-    *,*::before,*::after{animation:none !important;transition:none !important}
-  }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #14171c;
+        --bg-soft: #1a1e25;
+        --ink: #e8eaed;
+        --muted: #9aa3ad;
+        --line: #2b303a;
+        --accent: #2fbf9a;
+        --accent-soft: #173029;
+        --accent-ink: #0d1512;
+        --node: #f2d95c;
+        --node-alt: #4a4325;
+        --node-border: #0c0c0c;
+        --wire: #5b93e8;
+        --card: #1a1e25;
+        --tip-bg: #16302a;
+        --done: #3fd598;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+      }
+    }
 
-  /* ============ Nav ============ */
-  header.site{
-    position:sticky;top:0;z-index:50;background:var(--bg);
-    border-bottom:1px solid var(--line);
-  }
-  .nav{display:flex;align-items:center;gap:8px;height:60px}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:800;text-decoration:none;color:var(--ink);margin-right:auto}
-  .logo-mark{
-    width:30px;height:30px;border-radius:8px;background:var(--accent);color:var(--accent-ink);
-    display:grid;place-items:center;font-family:ui-monospace,Menlo,monospace;font-size:15px;font-weight:700;
-  }
-  .nav a.navlink{
-    text-decoration:none;color:var(--muted);font-size:.92rem;font-weight:600;
-    padding:7px 11px;border-radius:8px;
-  }
-  .nav a.navlink:hover{color:var(--ink);background:var(--bg-soft)}
-  .nav a.navlink.active{color:var(--accent);background:var(--accent-soft)}
-  .theme-btn{
-    border:1px solid var(--line);background:var(--card);color:var(--ink);
-    border-radius:8px;padding:6px 10px;font-size:.85rem;margin-left:6px;
-  }
-  .demo-pill{
-    font-family:ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.1em;
-    border:1px dashed var(--muted);color:var(--muted);border-radius:99px;padding:3px 9px;
-  }
-  @media (max-width:760px){
-    .nav{flex-wrap:wrap;height:auto;padding:8px 0}
-    .demo-pill{display:none}
-  }
+    :root[data-theme="dark"] {
+      --bg: #14171c;
+      --bg-soft: #1a1e25;
+      --ink: #e8eaed;
+      --muted: #9aa3ad;
+      --line: #2b303a;
+      --accent: #2fbf9a;
+      --accent-soft: #173029;
+      --accent-ink: #0d1512;
+      --node: #f2d95c;
+      --node-alt: #4a4325;
+      --node-border: #0c0c0c;
+      --wire: #5b93e8;
+      --card: #1a1e25;
+      --tip-bg: #16302a;
+      --done: #3fd598;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+    }
 
-  /* ============ Hero ============ */
-  .hero{padding:64px 0 40px;border-bottom:1px solid var(--line);background:
-    radial-gradient(900px 400px at 85% -10%, var(--accent-soft), transparent 65%);}
-  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
-  @media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
-  .hero p.lede{font-size:1.12rem;color:var(--muted);max-width:34rem}
-  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
-  .btn{
-    display:inline-block;text-decoration:none;font-weight:700;border-radius:10px;
-    padding:12px 20px;border:1px solid transparent;font-size:.98rem;
-  }
-  .btn-primary{background:var(--accent);color:var(--accent-ink)}
-  .btn-primary:hover{filter:brightness(1.08)}
-  .btn-ghost{border-color:var(--line);color:var(--ink);background:var(--card)}
-  .btn-ghost:hover{background:var(--bg-soft)}
-  .hero-stats{display:flex;gap:26px;margin-top:26px;flex-wrap:wrap}
-  .hero-stats div b{display:block;font-size:1.25rem;font-variant-numeric:tabular-nums}
-  .hero-stats div span{font-size:.8rem;color:var(--muted)}
+    :root[data-theme="light"] {
+      --bg: #ffffff;
+      --bg-soft: #f5f4ef;
+      --ink: #232936;
+      --muted: #5c6570;
+      --line: #e4e2d9;
+      --accent: #0e7c66;
+      --accent-soft: #e3f0ec;
+      --accent-ink: #ffffff;
+      --node: #ffe985;
+      --node-alt: #fff6cf;
+      --node-border: #2f2f2f;
+      --node-ink: #262620;
+      --wire: #2b78e4;
+      --card: #ffffff;
+      --tip-bg: #ecf5f1;
+      --done: #1d9e6f;
+      --shadow: 0 1px 2px rgba(35, 41, 54, .06), 0 8px 24px rgba(35, 41, 54, .07);
+    }
 
-  /* mini map in hero */
-  .mini-map{position:relative;height:330px;min-width:300px}
-  .mini-node{
-    position:absolute;background:var(--node);color:var(--node-ink);
-    border:2px solid var(--node-border);border-radius:9px;
-    padding:8px 12px;font-size:.82rem;font-weight:700;line-height:1.25;
-    box-shadow:2px 3px 0 var(--node-border);text-decoration:none;
-    transition:transform .12s ease;
-  }
-  .mini-node:hover{transform:translate(-1px,-1px)}
-  .mini-node.alt{background:var(--node-alt);color:var(--ink);box-shadow:1px 2px 0 var(--node-border)}
-  .mini-map svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-  .mini-map svg path{stroke:var(--wire);stroke-width:2;fill:none;stroke-dasharray:5 5;opacity:.8}
+    :root[data-theme="dark"] {
+      --node-ink: #262620;
+    }
 
-  /* ============ Sections ============ */
-  section.block{padding:56px 0;border-bottom:1px solid var(--line)}
-  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-  @media (max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:1fr}}
-  @media (max-width:600px){.grid-4{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:20px;box-shadow:var(--shadow);
-  }
-  a.card{display:block;text-decoration:none;color:var(--ink)}
-  a.card:hover{border-color:var(--accent)}
-  .card .tag{
-    font-family:ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.1em;
-    text-transform:uppercase;color:var(--accent);
-  }
-  .card h3{margin:.4rem 0 .35rem}
-  .card p{font-size:.9rem;color:var(--muted);margin:0}
-  .card .meta{margin-top:12px;font-size:.78rem;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
-  .step-num{
-    font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--accent);
-    font-size:.8rem;letter-spacing:.08em;
-  }
-  .b2b-strip{background:var(--bg-soft)}
+    * {
+      box-sizing: border-box
+    }
 
-  /* ============ Roadmap view ============ */
-  .rm-head{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;padding:34px 0 18px}
-  .rm-head .grow{flex:1;min-width:260px}
-  .progress-box{min-width:230px}
-  .progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);
-    font-family:ui-monospace,Menlo,monospace;margin-bottom:6px}
-  .progress-bar{height:8px;border-radius:99px;background:var(--bg-soft);border:1px solid var(--line);overflow:hidden}
-  .progress-fill{height:100%;background:var(--done);width:0%;transition:width .25s ease}
-  .rm-reset{border:none;background:none;color:var(--muted);font-size:.75rem;text-decoration:underline;padding:4px 0}
-  .rm-scroll{overflow-x:auto;padding-bottom:60px}
-  .rm-canvas{position:relative;margin:0 auto}
-  .rm-canvas svg{position:absolute;inset:0;pointer-events:none}
-  .rm-canvas svg path.wire{stroke:var(--wire);stroke-width:2;fill:none;stroke-dasharray:5 5;opacity:.85}
-  .rm-canvas svg path.spine{stroke:var(--wire);stroke-width:3;fill:none;opacity:.9}
-  .rm-node{
-    position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;
-    background:var(--node);color:var(--node-ink);border:2px solid var(--node-border);
-    border-radius:10px;padding:6px 12px;font-weight:700;cursor:pointer;
-    box-shadow:2px 3px 0 var(--node-border);font-size:.86rem;line-height:1.25;
-    transition:transform .1s ease;
-  }
-  .rm-node:hover{transform:translate(-1px,-1px)}
-  .rm-node.main{font-size:1rem;border-width:2.5px;box-shadow:3px 4px 0 var(--node-border)}
-  .rm-node.child{background:var(--node-alt);color:var(--ink);font-weight:600;box-shadow:1.5px 2.5px 0 var(--node-border)}
-  .rm-node.done{opacity:.66}
-  .rm-node.done::after{
-    content:"✓";position:absolute;top:-9px;right:-9px;width:20px;height:20px;border-radius:50%;
-    background:var(--done);color:#fff;font-size:12px;font-weight:800;
-    display:grid;place-items:center;border:2px solid var(--bg);
-  }
-  .rm-legend{display:flex;gap:18px;font-size:.75rem;color:var(--muted);padding:6px 0 14px;
-    font-family:ui-monospace,Menlo,monospace;flex-wrap:wrap}
-  .rm-legend i{display:inline-block;width:12px;height:12px;border:1.5px solid var(--node-border);border-radius:3px;
-    vertical-align:-1px;margin-right:6px}
-  .rm-legend .l-main i{background:var(--node)}
-  .rm-legend .l-child i{background:var(--node-alt)}
-  .rm-legend .l-done i{background:var(--done);border-color:var(--done)}
+    html,
+    body {
+      margin: 0;
+      padding: 0
+    }
 
-  /* ============ Drawer ============ */
-  .drawer-backdrop{
-    position:fixed;inset:0;background:rgba(15,18,24,.45);z-index:90;
-    opacity:0;pointer-events:none;transition:opacity .18s ease;
-  }
-  .drawer-backdrop.open{opacity:1;pointer-events:auto}
-  .drawer{
-    position:fixed;top:0;right:0;height:100%;width:min(420px,94vw);z-index:100;
-    background:var(--card);border-left:1px solid var(--line);
-    transform:translateX(102%);transition:transform .22s ease;
-    display:flex;flex-direction:column;
-  }
-  .drawer.open{transform:translateX(0)}
-  .drawer-head{padding:20px 22px 14px;border-bottom:1px solid var(--line)}
-  .drawer-head .tag{font-family:ui-monospace,Menlo,monospace;font-size:.68rem;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--accent)}
-  .drawer-head h3{font-size:1.25rem;margin:.3rem 0 0}
-  .drawer-close{
-    position:absolute;top:14px;right:14px;border:1px solid var(--line);background:var(--card);
-    color:var(--muted);border-radius:8px;width:32px;height:32px;font-size:16px;line-height:1;
-  }
-  .drawer-body{padding:18px 22px;overflow-y:auto;flex:1}
-  .drawer-body p{font-size:.94rem}
-  .drawer-body h4{margin:18px 0 8px;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;
-    font-family:ui-monospace,Menlo,monospace;color:var(--muted)}
-  .drawer-body ul{margin:0;padding-left:18px;font-size:.9rem}
-  .drawer-body ul li{margin-bottom:6px}
-  .ai-tip{
-    background:var(--tip-bg);border-radius:10px;padding:12px 14px;font-size:.88rem;margin-top:16px;
-    border:1px solid var(--line);
-  }
-  .ai-tip b{color:var(--accent)}
-  .drawer-foot{padding:16px 22px;border-top:1px solid var(--line)}
-  .done-btn{
-    width:100%;border-radius:10px;padding:12px;font-weight:700;font-size:.95rem;
-    border:2px solid var(--done);background:var(--done);color:#fff;
-  }
-  .done-btn.undone{background:transparent;color:var(--done)}
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.6 "Avenir Next", "Segoe UI", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
 
-  /* ============ Assessment ============ */
-  .quiz-shell{max-width:640px;margin:0 auto;padding:44px 0 70px}
-  .quiz-progress{display:flex;gap:6px;margin-bottom:26px}
-  .quiz-progress span{flex:1;height:5px;border-radius:99px;background:var(--bg-soft);border:1px solid var(--line)}
-  .quiz-progress span.on{background:var(--accent);border-color:var(--accent)}
-  .quiz-q{font-size:1.35rem;font-weight:800;margin-bottom:6px;letter-spacing:-.01em}
-  .quiz-sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
-  .opt{
-    display:flex;align-items:center;gap:12px;width:100%;text-align:left;
-    background:var(--card);border:1.5px solid var(--line);border-radius:12px;
-    padding:14px 16px;margin-bottom:10px;font-size:.97rem;color:var(--ink);
-  }
-  .opt:hover{border-color:var(--accent)}
-  .opt.selected{border-color:var(--accent);background:var(--accent-soft)}
-  .opt .k{
-    font-family:ui-monospace,Menlo,monospace;font-size:.7rem;border:1px solid var(--line);
-    border-radius:6px;padding:2px 7px;color:var(--muted);flex-shrink:0;
-  }
-  .quiz-nav{display:flex;justify-content:space-between;margin-top:22px}
-  .result-match{
-    font-family:ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums;
-    font-weight:700;color:var(--accent);font-size:1.05rem;
-  }
-  .match-bar{height:6px;border-radius:99px;background:var(--bg-soft);border:1px solid var(--line);
-    overflow:hidden;margin:8px 0 12px}
-  .match-fill{height:100%;background:var(--accent)}
-  .badge{
-    display:inline-block;font-size:.68rem;font-family:ui-monospace,Menlo,monospace;
-    letter-spacing:.08em;text-transform:uppercase;border-radius:99px;padding:3px 10px;
-    background:var(--accent-soft);color:var(--accent);margin-right:6px;
-  }
-  .facts{display:flex;gap:18px;font-size:.82rem;color:var(--muted);flex-wrap:wrap;
-    font-family:ui-monospace,Menlo,monospace}
+    .mono {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace
+    }
 
-  /* ============ Strategy timeline ============ */
-  .timeline{position:relative;margin:30px 0 0;padding-left:34px}
-  .timeline::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:3px;
-    background:var(--wire);opacity:.55;border-radius:2px}
-  .t-item{position:relative;padding-bottom:34px}
-  .t-item::before{
-    content:"";position:absolute;left:-31px;top:4px;width:16px;height:16px;border-radius:50%;
-    background:var(--node);border:2.5px solid var(--node-border);
-  }
-  .t-item .phase{font-family:ui-monospace,Menlo,monospace;font-size:.7rem;letter-spacing:.12em;
-    text-transform:uppercase;color:var(--accent)}
-  .t-item h3{margin:.25rem 0 .4rem}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-  .chip{font-size:.78rem;border:1px solid var(--line);border-radius:99px;padding:4px 12px;
-    background:var(--card);color:var(--muted)}
+    a {
+      color: var(--accent)
+    }
 
-  footer.site{padding:36px 0 48px;color:var(--muted);font-size:.85rem}
-  footer.site .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    button {
+      font: inherit;
+      cursor: pointer
+    }
 
-  .toast{
-    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-    background:var(--ink);color:var(--bg);padding:11px 20px;border-radius:10px;
-    font-size:.9rem;font-weight:600;z-index:200;transition:transform .25s ease,opacity .25s ease;
-    opacity:0;pointer-events:none;
-  }
-  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+    h1,
+    h2,
+    h3 {
+      line-height: 1.15;
+      text-wrap: balance;
+      margin: 0 0 .5rem
+    }
 
-  /* form */
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media (max-width:600px){.form-grid{grid-template-columns:1fr}}
-  .field{display:flex;flex-direction:column;gap:5px}
-  .field label{font-size:.78rem;font-weight:700;color:var(--muted)}
-  .field input,.field select,.field textarea{
-    background:var(--bg);border:1.5px solid var(--line);border-radius:9px;
-    padding:10px 12px;font:inherit;color:var(--ink);
-  }
-  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);outline:none}
-</style>
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.1rem);
+      font-weight: 800;
+      letter-spacing: -.02em
+    }
+
+    h2 {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 800;
+      letter-spacing: -.015em
+    }
+
+    h3 {
+      font-size: 1.08rem;
+      font-weight: 700
+    }
+
+    p {
+      margin: .35rem 0 1rem
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    .wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 20px
+    }
+
+    .eyebrow {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 .6rem;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--wire);
+      outline-offset: 2px;
+      border-radius: 4px
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+
+    /* ============ Nav ============ */
+    header.site {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 60px
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--ink);
+      margin-right: auto
+    }
+
+    .logo-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      display: grid;
+      place-items: center;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .nav a.navlink {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 600;
+      padding: 7px 11px;
+      border-radius: 8px;
+    }
+
+    .nav a.navlink:hover {
+      color: var(--ink);
+      background: var(--bg-soft)
+    }
+
+    .nav a.navlink.active {
+      color: var(--accent);
+      background: var(--accent-soft)
+    }
+
+    .theme-btn {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: .85rem;
+      margin-left: 6px;
+    }
+
+    .demo-pill {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .66rem;
+      letter-spacing: .1em;
+      border: 1px dashed var(--muted);
+      color: var(--muted);
+      border-radius: 99px;
+      padding: 3px 9px;
+    }
+
+    @media (max-width:760px) {
+      .nav {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 8px 0
+      }
+
+      .demo-pill {
+        display: none
+      }
+    }
+
+    /* ============ Hero ============ */
+    .hero {
+      padding: 64px 0 40px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(900px 400px at 85% -10%, var(--accent-soft), transparent 65%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 44px;
+      align-items: center
+    }
+
+    @media (max-width:860px) {
+      .hero-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .hero p.lede {
+      font-size: 1.12rem;
+      color: var(--muted);
+      max-width: 34rem
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 12px 20px;
+      border: 1px solid transparent;
+      font-size: .98rem;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-ink)
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.08)
+    }
+
+    .btn-ghost {
+      border-color: var(--line);
+      color: var(--ink);
+      background: var(--card)
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg-soft)
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 26px;
+      margin-top: 26px;
+      flex-wrap: wrap
+    }
+
+    .hero-stats div b {
+      display: block;
+      font-size: 1.25rem;
+      font-variant-numeric: tabular-nums
+    }
+
+    .hero-stats div span {
+      font-size: .8rem;
+      color: var(--muted)
+    }
+
+    /* mini map in hero */
+    .mini-map {
+      position: relative;
+      height: 330px;
+      min-width: 300px
+    }
+
+    .mini-node {
+      position: absolute;
+      background: var(--node);
+      color: var(--node-ink);
+      border: 2px solid var(--node-border);
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-size: .82rem;
+      font-weight: 700;
+      line-height: 1.25;
+      box-shadow: 2px 3px 0 var(--node-border);
+      text-decoration: none;
+      transition: transform .12s ease;
+    }
+
+    .mini-node:hover {
+      transform: translate(-1px, -1px)
+    }
+
+    .mini-node.alt {
+      background: var(--node-alt);
+      color: var(--ink);
+      box-shadow: 1px 2px 0 var(--node-border)
+    }
+
+    .mini-map svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none
+    }
+
+    .mini-map svg path {
+      stroke: var(--wire);
+      stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 5 5;
+      opacity: .8
+    }
+
+    /* ============ Sections ============ */
+    section.block {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px
+    }
+
+    @media (max-width:900px) {
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media (max-width:600px) {
+      .grid-4 {
+        grid-template-columns: 1fr
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: var(--ink)
+    }
+
+    a.card:hover {
+      border-color: var(--accent)
+    }
+
+    .card .tag {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .66rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .card h3 {
+      margin: .4rem 0 .35rem
+    }
+
+    .card p {
+      font-size: .9rem;
+      color: var(--muted);
+      margin: 0
+    }
+
+    .card .meta {
+      margin-top: 12px;
+      font-size: .78rem;
+      color: var(--muted);
+      font-family: ui-monospace, Menlo, monospace
+    }
+
+    .step-num {
+      font-family: ui-monospace, Menlo, monospace;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: .8rem;
+      letter-spacing: .08em;
+    }
+
+    .b2b-strip {
+      background: var(--bg-soft)
+    }
+
+    /* ============ Roadmap view ============ */
+    .rm-head {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding: 34px 0 18px
+    }
+
+    .rm-head .grow {
+      flex: 1;
+      min-width: 260px
+    }
+
+    .progress-box {
+      min-width: 230px
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .78rem;
+      color: var(--muted);
+      font-family: ui-monospace, Menlo, monospace;
+      margin-bottom: 6px
+    }
+
+    .progress-bar {
+      height: 8px;
+      border-radius: 99px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      overflow: hidden
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--done);
+      width: 0%;
+      transition: width .25s ease
+    }
+
+    .rm-reset {
+      border: none;
+      background: none;
+      color: var(--muted);
+      font-size: .75rem;
+      text-decoration: underline;
+      padding: 4px 0
+    }
+
+    .rm-scroll {
+      overflow-x: auto;
+      padding-bottom: 60px
+    }
+
+    .rm-canvas {
+      position: relative;
+      margin: 0 auto
+    }
+
+    .rm-canvas svg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none
+    }
+
+    .rm-canvas svg path.wire {
+      stroke: var(--wire);
+      stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 5 5;
+      opacity: .85
+    }
+
+    .rm-canvas svg path.spine {
+      stroke: var(--wire);
+      stroke-width: 3;
+      fill: none;
+      opacity: .9
+    }
+
+    .rm-node {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: var(--node);
+      color: var(--node-ink);
+      border: 2px solid var(--node-border);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 2px 3px 0 var(--node-border);
+      font-size: .86rem;
+      line-height: 1.25;
+      transition: transform .1s ease;
+    }
+
+    .rm-node:hover {
+      transform: translate(-1px, -1px)
+    }
+
+    .rm-node.main {
+      font-size: 1rem;
+      border-width: 2.5px;
+      box-shadow: 3px 4px 0 var(--node-border)
+    }
+
+    .rm-node.child {
+      background: var(--node-alt);
+      color: var(--ink);
+      font-weight: 600;
+      box-shadow: 1.5px 2.5px 0 var(--node-border)
+    }
+
+    .rm-node.done {
+      opacity: .66
+    }
+
+    .rm-node.done::after {
+      content: "✓";
+      position: absolute;
+      top: -9px;
+      right: -9px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--done);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--bg);
+    }
+
+    .rm-legend {
+      display: flex;
+      gap: 18px;
+      font-size: .75rem;
+      color: var(--muted);
+      padding: 6px 0 14px;
+      font-family: ui-monospace, Menlo, monospace;
+      flex-wrap: wrap
+    }
+
+    .rm-legend i {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 1.5px solid var(--node-border);
+      border-radius: 3px;
+      vertical-align: -1px;
+      margin-right: 6px
+    }
+
+    .rm-legend .l-main i {
+      background: var(--node)
+    }
+
+    .rm-legend .l-child i {
+      background: var(--node-alt)
+    }
+
+    .rm-legend .l-done i {
+      background: var(--done);
+      border-color: var(--done)
+    }
+
+    /* ============ Drawer ============ */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 18, 24, .45);
+      z-index: 90;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(420px, 94vw);
+      z-index: 100;
+      background: var(--card);
+      border-left: 1px solid var(--line);
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer.open {
+      transform: translateX(0)
+    }
+
+    .drawer-head {
+      padding: 20px 22px 14px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .drawer-head .tag {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .68rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent)
+    }
+
+    .drawer-head h3 {
+      font-size: 1.25rem;
+      margin: .3rem 0 0
+    }
+
+    .drawer-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--muted);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .drawer-body {
+      padding: 18px 22px;
+      overflow-y: auto;
+      flex: 1
+    }
+
+    .drawer-body p {
+      font-size: .94rem
+    }
+
+    .drawer-body h4 {
+      margin: 18px 0 8px;
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-family: ui-monospace, Menlo, monospace;
+      color: var(--muted)
+    }
+
+    .drawer-body ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: .9rem
+    }
+
+    .drawer-body ul li {
+      margin-bottom: 6px
+    }
+
+    .ai-tip {
+      background: var(--tip-bg);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: .88rem;
+      margin-top: 16px;
+      border: 1px solid var(--line);
+    }
+
+    .ai-tip b {
+      color: var(--accent)
+    }
+
+    .drawer-foot {
+      padding: 16px 22px;
+      border-top: 1px solid var(--line)
+    }
+
+    .done-btn {
+      width: 100%;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 700;
+      font-size: .95rem;
+      border: 2px solid var(--done);
+      background: var(--done);
+      color: #fff;
+    }
+
+    .done-btn.undone {
+      background: transparent;
+      color: var(--done)
+    }
+
+    /* ============ Assessment ============ */
+    .quiz-shell {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 44px 0 70px
+    }
+
+    .quiz-progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 26px
+    }
+
+    .quiz-progress span {
+      flex: 1;
+      height: 5px;
+      border-radius: 99px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line)
+    }
+
+    .quiz-progress span.on {
+      background: var(--accent);
+      border-color: var(--accent)
+    }
+
+    .quiz-q {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -.01em
+    }
+
+    .quiz-sub {
+      color: var(--muted);
+      font-size: .9rem;
+      margin-bottom: 20px
+    }
+
+    .opt {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      font-size: .97rem;
+      color: var(--ink);
+    }
+
+    .opt:hover {
+      border-color: var(--accent)
+    }
+
+    .opt.selected {
+      border-color: var(--accent);
+      background: var(--accent-soft)
+    }
+
+    .opt .k {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .7rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 2px 7px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 22px
+    }
+
+    .result-match {
+      font-family: ui-monospace, Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.05rem;
+    }
+
+    .match-bar {
+      height: 6px;
+      border-radius: 99px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      margin: 8px 0 12px
+    }
+
+    .match-fill {
+      height: 100%;
+      background: var(--accent)
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: .68rem;
+      font-family: ui-monospace, Menlo, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-radius: 99px;
+      padding: 3px 10px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin-right: 6px;
+    }
+
+    .facts {
+      display: flex;
+      gap: 18px;
+      font-size: .82rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+      font-family: ui-monospace, Menlo, monospace
+    }
+
+    /* ============ Strategy timeline ============ */
+    .timeline {
+      position: relative;
+      margin: 30px 0 0;
+      padding-left: 34px
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 11px;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: var(--wire);
+      opacity: .55;
+      border-radius: 2px
+    }
+
+    .t-item {
+      position: relative;
+      padding-bottom: 34px
+    }
+
+    .t-item::before {
+      content: "";
+      position: absolute;
+      left: -31px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--node);
+      border: 2.5px solid var(--node-border);
+    }
+
+    .t-item .phase {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent)
+    }
+
+    .t-item h3 {
+      margin: .25rem 0 .4rem
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px
+    }
+
+    .chip {
+      font-size: .78rem;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      padding: 4px 12px;
+      background: var(--card);
+      color: var(--muted)
+    }
+
+    footer.site {
+      padding: 36px 0 48px;
+      color: var(--muted);
+      font-size: .85rem
+    }
+
+    footer.site .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--ink);
+      color: var(--bg);
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 600;
+      z-index: 200;
+      transition: transform .25s ease, opacity .25s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1
+    }
+
+    /* form */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    @media (max-width:600px) {
+      .form-grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px
+    }
+
+    .field label {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--muted)
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      background: var(--bg);
+      border: 1.5px solid var(--line);
+      border-radius: 9px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+      outline: none
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="site">
-  <div class="wrap nav">
-    <a class="logo" href="#home"><span class="logo-mark">CN</span>Career Navigator</a>
-    <a class="navlink" data-route="home" href="#home">Home</a>
-    <a class="navlink" data-route="roadmaps" href="#roadmaps">Roadmaps</a>
-    <a class="navlink" data-route="assessment" href="#assessment">Assessment</a>
-    <a class="navlink" data-route="partners" href="#partners">Partners</a>
-    <a class="navlink" data-route="strategy" href="#strategy">Strategy</a>
-    <span class="demo-pill">clickable prototype</span>
-    <button class="theme-btn" id="themeToggle" aria-label="Toggle dark mode">◐</button>
-  </div>
-</header>
+  <header class="site">
+    <div class="wrap nav">
+      <a class="logo" href="#home"><span class="logo-mark">CN</span>Career Navigator</a>
+      <a class="navlink" data-route="home" href="#home">Home</a>
+      <a class="navlink" data-route="roadmaps" href="#roadmaps">Roadmaps</a>
+      <a class="navlink" data-route="assessment" href="#assessment">Assessment</a>
+      <a class="navlink" data-route="partners" href="#partners">Partners</a>
+      <a class="navlink" data-route="strategy" href="#strategy">Strategy</a>
+      <span class="demo-pill">clickable prototype</span>
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </header>
 
-<main id="app" aria-live="polite"></main>
+  <main id="app" aria-live="polite"></main>
 
-<div class="drawer-backdrop" id="drawerBackdrop"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
-  <div class="drawer-head">
-    <span class="tag" id="drawerTag"></span>
-    <h3 id="drawerTitle"></h3>
-    <button class="drawer-close" id="drawerClose" aria-label="Close panel">×</button>
-  </div>
-  <div class="drawer-body" id="drawerBody"></div>
-  <div class="drawer-foot">
-    <button class="done-btn" id="doneBtn">Mark as done</button>
-  </div>
-</aside>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <div class="drawer-head">
+      <span class="tag" id="drawerTag"></span>
+      <h3 id="drawerTitle"></h3>
+      <button class="drawer-close" id="drawerClose" aria-label="Close panel">×</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-foot">
+      <button class="done-btn" id="doneBtn">Mark as done</button>
+    </div>
+  </aside>
 
-<div class="toast" id="toast"></div>
+  <div class="toast" id="toast"></div>
 
-<script>
-/* =========================================================
-   Career Navigator — clickable prototype
-   Single-file SPA · hash routing · no dependencies
-   ========================================================= */
+  <script>
+    /* =========================================================
+       Career Navigator 
+       Single-file SPA · hash routing · no dependencies
+       ========================================================= */
 
-/* ---------- Roadmap data ---------- */
-function N(t,d,r,tip){return {t:t,d:d,r:r||[],tip:tip||""}}
+    /* ---------- Roadmap data ---------- */
+    function N(t, d, r, tip) { return { t: t, d: d, r: r || [], tip: tip || "" } }
 
-const ROADMAPS = {
-  homemaker: {
-    title: "Return to Work",
-    persona: "Homemakers re-entering the workforce",
-    blurb: "You didn't take years off — you ran a household. This roadmap turns that experience into a paid role, step by step.",
-    weeks: "12–24 weeks",
-    phases: [
-      { main: N("Rediscover","Before applying anywhere, take stock of who you are professionally today — not who you were before the career break.",
-          ["Career Navigator self-discovery worksheet","'Back to Work' journal template"],
-          "Our AI interviews you conversationally and drafts your skills inventory for you — most users find 12+ transferable skills they hadn't counted."),
-        left: [
-          N("Life-skills audit","List everything you actually did: budgeting, scheduling, negotiating, caregiving, event planning, conflict resolution. These are transferable skills employers pay for.",
-            ["Transferable skills checklist (60 items)"],"The AI maps each household responsibility to job-market language, e.g. 'managed family budget' → 'financial planning & expense control'."),
-          N("Energy & constraints map","Be honest about hours, childcare windows, commute limits and energy. A plan that ignores your real constraints will fail in week 3.",
-            ["Weekly time-budget canvas"],"")
-        ],
-        right: [
-          N("Interests & values","What kind of work would you actually enjoy? Helping people, organizing chaos, working with numbers, making things?",
-            ["RIASEC-style interest quiz (built in)"],""),
-          N("Confidence rebuild","The gap feels bigger from the inside than it looks from the outside. Join a returner community and hear how others made it.",
-            ["Returner stories library","Weekly peer circle (community)"],"")
+    const ROADMAPS = {
+      homemaker: {
+        title: "Return to Work",
+        persona: "Homemakers re-entering the workforce",
+        blurb: "You didn't take years off — you ran a household. This roadmap turns that experience into a paid role, step by step.",
+        weeks: "12–24 weeks",
+        phases: [
+          {
+            main: N("Rediscover", "Before applying anywhere, take stock of who you are professionally today — not who you were before the career break.",
+              ["Career Navigator self-discovery worksheet", "'Back to Work' journal template"],
+              "Our AI interviews you conversationally and drafts your skills inventory for you — most users find 12+ transferable skills they hadn't counted."),
+            left: [
+              N("Life-skills audit", "List everything you actually did: budgeting, scheduling, negotiating, caregiving, event planning, conflict resolution. These are transferable skills employers pay for.",
+                ["Transferable skills checklist (60 items)"], "The AI maps each household responsibility to job-market language, e.g. 'managed family budget' → 'financial planning & expense control'."),
+              N("Energy & constraints map", "Be honest about hours, childcare windows, commute limits and energy. A plan that ignores your real constraints will fail in week 3.",
+                ["Weekly time-budget canvas"], "")
+            ],
+            right: [
+              N("Interests & values", "What kind of work would you actually enjoy? Helping people, organizing chaos, working with numbers, making things?",
+                ["RIASEC-style interest quiz (built in)"], ""),
+              N("Confidence rebuild", "The gap feels bigger from the inside than it looks from the outside. Join a returner community and hear how others made it.",
+                ["Returner stories library", "Weekly peer circle (community)"], "")
+            ]
+          },
+          {
+            main: N("Choose a path", "Pick one realistic target role. One. Spreading across five directions is the most common reason re-entry stalls.",
+              [], "The AI shortlists roles where your transferable skills + local demand + your constraints overlap."),
+            left: [
+              N("Market reality check", "Look at real local postings: how many openings, what pay, what hard requirements. Dreams meet data here.",
+                ["Local demand snapshot (sample data)"], ""),
+              N("Shortlist 3 roles", "Three candidate roles that fit your skills, constraints and interests — with honest effort estimates for each.", [], "")
+            ],
+            right: [
+              N("Talk to 5 people", "Five short coffee chats with people already doing the role. Cheapest possible way to test a career before training for it.",
+                ["Outreach message templates", "Question script for informational interviews"], ""),
+              N("Commit to one target", "Write it down: role, target salary range, target start month. Everything after this node serves that one goal.", [], "")
+            ]
+          },
+          {
+            main: N("Close the gap", "Compare what the target role requires with what you have, then close only the gaps that matter for getting hired.",
+              [], "Gap analysis is automatic: paste 5 job postings and the AI produces your personal gap list, ranked by hiring impact."),
+            left: [
+              N("Skill gap analysis", "Which 2–3 missing skills actually block interviews? Ignore the rest for now — you can learn on the job.", [], ""),
+              N("12-week learning plan", "A realistic plan in your real weekly hours. Small, scheduled, finishable.",
+                ["Study planner synced to your constraints map"], "")
+            ],
+            right: [
+              N("Course / certificate", "One recognized certificate beats five random YouTube playlists on a resume that has a gap.",
+                ["Partner training-school catalog", "Funding & voucher options via job centers"], ""),
+              N("Portfolio project", "Recent, visible proof of skill: a bookkeeping cleanup, an event you organized, a small dataset analyzed.", [], ""),
+              N("Returnship / volunteering", "A short returnship, volunteer role or part-time gig converts 'gap' into 'recent experience' on paper.",
+                ["Returnship program directory"], "")
+            ]
+          },
+          {
+            main: N("Go to market", "Now you sell. The goal of this phase is interviews — treat applications as a numbers-and-quality game.",
+              [], "The AI writes a first draft of every application asset, then coaches you through mock interviews with role-specific questions."),
+            left: [
+              N("Resume that owns the gap", "State the career break plainly and pivot to what you did and learned. Confidence, not apology.",
+                ["Gap-positive resume examples", "ATS-friendly template"], ""),
+              N("LinkedIn refresh", "Photo, headline aimed at the target role, 'open to work' set, and your portfolio project pinned.", [], "")
+            ],
+            right: [
+              N("Referral networking", "Most re-entry hires come through people, not portals. Reactivate old colleagues, school networks, community contacts.",
+                ["Reactivation message templates"], ""),
+              N("Mock interviews", "Practice the gap question until it's boring. Then practice the role questions.", [], "Unlimited AI mock interviews with feedback on every answer."),
+              N("Apply in batches of 10", "Ten tailored applications, review responses, adjust, repeat. Track everything.",
+                ["Application tracker"], "")
+            ]
+          },
+          {
+            main: N("Land & grow", "Offer in hand — finish strong, and set up the first months so the comeback sticks.", [], ""),
+            left: [
+              N("Negotiate the offer", "Returners under-ask. Know the market range and negotiate at least once — the worst realistic outcome is 'no'.",
+                ["Salary range data by role (sample)"], "")
+            ],
+            right: [
+              N("First 90 days plan", "Small early wins, clear expectations with your manager, and a sustainable routine at home.", [], ""),
+              N("Find a mentor", "One experienced person who has your back doubles your odds of staying and growing.",
+                ["Mentor matching (community)"], "")
+            ]
+          }
         ]
       },
-      { main: N("Choose a path","Pick one realistic target role. One. Spreading across five directions is the most common reason re-entry stalls.",
-          [],"The AI shortlists roles where your transferable skills + local demand + your constraints overlap."),
-        left: [
-          N("Market reality check","Look at real local postings: how many openings, what pay, what hard requirements. Dreams meet data here.",
-            ["Local demand snapshot (sample data)"],""),
-          N("Shortlist 3 roles","Three candidate roles that fit your skills, constraints and interests — with honest effort estimates for each.",[],"")
-        ],
-        right: [
-          N("Talk to 5 people","Five short coffee chats with people already doing the role. Cheapest possible way to test a career before training for it.",
-            ["Outreach message templates","Question script for informational interviews"],""),
-          N("Commit to one target","Write it down: role, target salary range, target start month. Everything after this node serves that one goal.",[],"")
+
+      immigrant: {
+        title: "New-Country Career Launch",
+        persona: "New immigrants building a career in a new country",
+        blurb: "Your experience counts — it just needs translating: credentials, language, local norms, local network. This roadmap covers all four.",
+        weeks: "16–32 weeks",
+        phases: [
+          {
+            main: N("Arrive & assess", "Map what you're bringing and what the new market requires before spending money on courses.", [],
+              "The AI compares your home-country experience against local equivalents and flags what transfers directly."),
+            left: [
+              N("Credential inventory", "Degrees, licenses, certificates, years of experience — list everything, even what seems irrelevant here.", [], ""),
+              N("Language level check", "Get an honest CEFR-style level for the local language and for professional English. Target level depends on the role, not perfection.",
+                ["Free placement tests", "Professional-language courses directory"], "")
+            ],
+            right: [
+              N("Local job-market norms", "How hiring works here: resume style, references, interview culture, salary talk. It differs more than people expect.",
+                ["Country hiring-culture guide"], ""),
+              N("Work permit & basics", "Confirm what you're allowed to work, tax registration, and any role-specific licensing rules.",
+                ["Official checklists (links)"], "")
+            ]
+          },
+          {
+            main: N("Choose a path", "Decide between your original profession, an adjacent role, or a strategic re-entry role that gets you in the door fast.", [], ""),
+            left: [
+              N("Degree transfer map", "Some professions transfer with paperwork; some need re-licensing; some are easier to enter sideways. Know which yours is.", [], ""),
+              N("In-demand shortlist", "Roles with local shortage lists and visa-friendly employers move faster. Cross-check your skills against them.",
+                ["Shortage occupation lists (sample)"], "")
+            ],
+            right: [
+              N("Informational interviews", "Talk to immigrants from your country already working in your field here. They know the real shortcuts.",
+                ["Expat community directory", "Outreach templates"], ""),
+              N("Commit to one target", "One role, one target start date. Adjacent role now doesn't mean giving up the original profession forever.", [], "")
+            ]
+          },
+          {
+            main: N("Close the gap", "Close the credibility gap the local market sees — recognition, local proof, professional language.", [], ""),
+            left: [
+              N("Credential evaluation", "Get degrees formally evaluated (WES-style) so employers don't have to guess what they're worth.",
+                ["Evaluation services directory"], ""),
+              N("Local certification", "One local certificate signals 'I operate in this system now' — often more valuable than another foreign one.",
+                ["Partner training-school catalog"], "")
+            ],
+            right: [
+              N("Professional language", "Not general fluency — the vocabulary of your profession: meetings, emails, interviews.",
+                ["Role-specific phrase decks"], "The AI runs interview practice in the local language and corrects professional phrasing."),
+              N("Local experience", "Volunteering, internships or project work — the first local reference breaks the 'no local experience' loop.",
+                ["NGO & volunteer partner list"], "")
+            ]
+          },
+          {
+            main: N("Go to market", "Apply like a local: local-format documents, local networks, local interview style.", [], ""),
+            left: [
+              N("Local-style resume", "Rebuilt in the local format, with foreign employers explained in one line each ('largest retail bank in X').",
+                ["Country resume templates"], ""),
+              N("LinkedIn localized", "Headline and summary in the local market's language and keywords, location updated.", [], "")
+            ],
+            right: [
+              N("Immigrant networks", "Meetups, professional immigrant associations, alumni groups — warm intros beat cold portals.",
+                ["Meetup & association directory"], ""),
+              N("Interview culture practice", "Practice the local small talk, self-presentation style and salary conversation until they feel natural.", [], "Mock interviews tuned to the local interview culture."),
+              N("Apply in batches", "Track applications, iterate on what gets responses. Aim for referrals over cold applications.",
+                ["Application tracker"], "")
+            ]
+          },
+          {
+            main: N("Land & grow", "The first local job is a beachhead — use it to rebuild the career you actually want.", [], ""),
+            left: [
+              N("Offer & contract basics", "Understand local contract norms: probation, notice periods, benefits, union agreements.", [], "")
+            ],
+            right: [
+              N("Workplace culture onboarding", "Feedback style, hierarchy, meetings, lunch culture — learn the unwritten rules deliberately.", [], ""),
+              N("Grow your local network", "Every month, one new professional contact. In two years your network is local — and so are your options.", [], "")
+            ]
+          }
         ]
       },
-      { main: N("Close the gap","Compare what the target role requires with what you have, then close only the gaps that matter for getting hired.",
-          [],"Gap analysis is automatic: paste 5 job postings and the AI produces your personal gap list, ranked by hiring impact."),
-        left: [
-          N("Skill gap analysis","Which 2–3 missing skills actually block interviews? Ignore the rest for now — you can learn on the job.",[],""),
-          N("12-week learning plan","A realistic plan in your real weekly hours. Small, scheduled, finishable.",
-            ["Study planner synced to your constraints map"],"")
-        ],
-        right: [
-          N("Course / certificate","One recognized certificate beats five random YouTube playlists on a resume that has a gap.",
-            ["Partner training-school catalog","Funding & voucher options via job centers"],""),
-          N("Portfolio project","Recent, visible proof of skill: a bookkeeping cleanup, an event you organized, a small dataset analyzed.",[],""),
-          N("Returnship / volunteering","A short returnship, volunteer role or part-time gig converts 'gap' into 'recent experience' on paper.",
-            ["Returnship program directory"],"")
+
+      restart: {
+        title: "Back on Track",
+        persona: "Restarting after long-term unemployment",
+        blurb: "A long gap is a situation, not a verdict. This roadmap rebuilds routine, recent proof, and momentum — in that order.",
+        weeks: "10–20 weeks",
+        phases: [
+          {
+            main: N("Reset", "Start from an honest, blame-free baseline. Structure first, applications later.", [], ""),
+            left: [
+              N("No-blame skills inventory", "What you can do hasn't disappeared. List skills from every job, project and life period — dated honestly.", [],
+                "The AI rebuilds your work history conversationally, so you don't stare at a blank page."),
+              N("Routine & structure", "Job search works as a part-time job with fixed hours. Set a weekly schedule before anything else.",
+                ["Weekly search schedule template"], "")
+            ],
+            right: [
+              N("Financial runway plan", "Know your numbers and available support. Panic makes bad career decisions; a runway plan buys clear thinking.",
+                ["Benefits & support checklist (job center)"], ""),
+              N("Wellbeing support", "Long unemployment is hard on people. A peer group or counselor is a performance tool, not a luxury.",
+                ["Peer support circles (community)"], "")
+            ]
+          },
+          {
+            main: N("Choose a path", "Aim for a realistic re-entry role — the goal is recent employment, then leverage.", [], ""),
+            left: [
+              N("Market scan", "Which local sectors hire steadily and value reliability over pedigree? Start the search there.",
+                ["Local demand snapshot (sample data)"], ""),
+              N("Adjacent-role mapping", "Your old title may have moved on. Find its modern neighbors that still want your core skills.", [], "")
+            ],
+            right: [
+              N("Commit to one target", "One re-entry role, one target date. Momentum beats optimization at this stage.", [], "")
+            ]
+          },
+          {
+            main: N("Rebuild proof", "Employers ask 'what have you done lately?' — build a recent answer in weeks, not years.", [], ""),
+            left: [
+              N("Refresher course", "A short course updates both your skills and your resume's most recent line.",
+                ["Partner training catalog", "Job-center funded options"], ""),
+              N("Freelance / volunteer gigs", "Small paid gigs or structured volunteering create recent references and recent dates.", [], "")
+            ],
+            right: [
+              N("Portfolio of recent work", "Collect the evidence: course certificate, gig outcomes, a project write-up. Recency is the product.", [], "")
+            ]
+          },
+          {
+            main: N("Go to market", "Apply with a story that starts now, not with the gap.", [], ""),
+            left: [
+              N("Gap-positive resume", "Lead with the recent course and gigs; state the gap in one calm line. No apology paragraph.",
+                ["Resume examples with long gaps"], ""),
+              N("References refresh", "Line up 2–3 people who will pick up the phone: past managers, course instructors, gig clients.", [], "")
+            ],
+            right: [
+              N("Agencies & job center", "Staffing agencies and job-center partnerships fill re-entry roles fast — use them in parallel with direct applications.",
+                ["Partner agency list"], ""),
+              N("Mock interviews", "Rehearse the gap question until it's a 20-second non-event, then move to role questions.", [],
+                "AI mock interviews, unlimited retries, private.")
+            ]
+          },
+          {
+            main: N("Land & grow", "Convert the first job back into a stable trajectory.", [], ""),
+            left: [
+              N("Trial-period plan", "Most re-entry offers start with probation. Plan reliability signals: punctuality, early wins, asking good questions.", [], "")
+            ],
+            right: [
+              N("90-day check-ins", "Monthly self-review with your coach or the AI: what's working, what's wobbly, what's next.", [], ""),
+              N("Skill habit", "One hour a week of learning, forever. It's the insurance policy against the next gap.", [], "")
+            ]
+          }
         ]
       },
-      { main: N("Go to market","Now you sell. The goal of this phase is interviews — treat applications as a numbers-and-quality game.",
-          [],"The AI writes a first draft of every application asset, then coaches you through mock interviews with role-specific questions."),
-        left: [
-          N("Resume that owns the gap","State the career break plainly and pivot to what you did and learned. Confidence, not apology.",
-            ["Gap-positive resume examples","ATS-friendly template"],""),
-          N("LinkedIn refresh","Photo, headline aimed at the target role, 'open to work' set, and your portfolio project pinned.",[],"")
-        ],
-        right: [
-          N("Referral networking","Most re-entry hires come through people, not portals. Reactivate old colleagues, school networks, community contacts.",
-            ["Reactivation message templates"],""),
-          N("Mock interviews","Practice the gap question until it's boring. Then practice the role questions.",[],"Unlimited AI mock interviews with feedback on every answer."),
-          N("Apply in batches of 10","Ten tailored applications, review responses, adjust, repeat. Track everything.",
-            ["Application tracker"],"")
-        ]
-      },
-      { main: N("Land & grow","Offer in hand — finish strong, and set up the first months so the comeback sticks.",[],""),
-        left: [
-          N("Negotiate the offer","Returners under-ask. Know the market range and negotiate at least once — the worst realistic outcome is 'no'.",
-            ["Salary range data by role (sample)"],"")
-        ],
-        right: [
-          N("First 90 days plan","Small early wins, clear expectations with your manager, and a sustainable routine at home.",[],""),
-          N("Find a mentor","One experienced person who has your back doubles your odds of staying and growing.",
-            ["Mentor matching (community)"],"")
+
+      switch40: {
+        title: "Career Switch at 40+",
+        persona: "Experienced professionals changing direction",
+        blurb: "You're not starting over — you're repositioning twenty years of assets. This roadmap treats experience as leverage, not baggage.",
+        weeks: "16–28 weeks",
+        phases: [
+          {
+            main: N("Take stock", "Audit two decades of work for what transfers, what differentiates, and what you're done with.", [],
+              "The AI mines your history for patterns you can't see from inside: the skills that kept showing up in your best work."),
+            left: [
+              N("20-year skills audit", "Separate the role from the skills. 'Retail manager' contains negotiation, P&L, hiring, logistics — those travel.", [], ""),
+              N("Keep / leave list", "What must the next chapter include, and what will you never do again? Write both lists.", [], "")
+            ],
+            right: [
+              N("Risk & runway", "How many months can you fund a transition? Full switch, bridge job, or side-project-first — runway decides.", [], ""),
+              N("Family alignment", "A 40+ switch is a household decision. Get real agreement on money, time and stress before committing.", [], "")
+            ]
+          },
+          {
+            main: N("Choose a path", "Pick a direction where your domain knowledge is an unfair advantage, not a discarded asset.", [], ""),
+            left: [
+              N("Age-friendly sectors scan", "Some industries actively value experience: healthcare, skilled trades, compliance, customer success, education, project delivery.",
+                ["Sector demand snapshot (sample)"], ""),
+              N("Leverage-your-domain map", "The fastest switches keep the industry and change the function, or keep the function and change the industry — rarely both at once.", [], "")
+            ],
+            right: [
+              N("Test with a side project", "Before quitting anything, spend 4 weekends doing the new thing in miniature. Cheap data, no regret.", [], ""),
+              N("Commit to one target", "One role, one thesis for why you'll win at it, one target date.", [], "")
+            ]
+          },
+          {
+            main: N("Close the gap", "Close the specific credibility gaps — with targeted upskilling, not another degree.", [], ""),
+            left: [
+              N("Targeted upskilling", "6–12 weeks of role-specific training beats a 2-year generic program at this stage of the game.",
+                ["Partner bootcamp & course catalog"], ""),
+              N("Modern-tooling refresh", "Learn the current tool stack of the target role — including working fluently with AI tools. Recency of tools is the cheapest credibility.", [], "")
+            ],
+            right: [
+              N("Credibility portfolio", "A project that fuses old domain + new skill: e.g. a logistics veteran's supply-chain dashboard. Unfair advantage, visible.", [], "")
+            ]
+          },
+          {
+            main: N("Go to market", "Position experience as the product. You're selling judgment, reliability and a shorter ramp-up.", [], ""),
+            left: [
+              N("Experience-forward resume", "Lead with the last 10 years and the transition thesis. Summarize the rest — nobody needs 1998 in detail.",
+                ["Career-change resume examples"], ""),
+              N("Former-colleague network", "Twenty years of colleagues is the strongest asset you have. Tell them what you're looking for — specifically.", [], "")
+            ],
+            right: [
+              N("Seniority as asset pitch", "Prepare the 60-second answer to 'why change now?' that lands as strength, not crisis.", [],
+                "The AI stress-tests your pitch with the toughest versions of the age question — legally askable or not."),
+              N("Interview reframing", "Practice interviewing with people 15 years younger without either deference or condescension.", [], ""),
+              N("Apply + consult in parallel", "Freelance or consulting gigs in the new field often convert to offers — and pay during the search.", [], "")
+            ]
+          },
+          {
+            main: N("Land & grow", "Close the deal on value, then build the second-act career deliberately.", [], ""),
+            left: [
+              N("Negotiate on value", "Anchor on the problems you solve and the ramp-up you skip, not on years or titles.", [], "")
+            ],
+            right: [
+              N("First 90 days", "Prove the transition thesis fast: one visible win that uses old domain + new role.", [], ""),
+              N("Mentor others", "Mentoring juniors builds your standing in the new field faster than anything else — and it's the part 40+ switchers are best at.", [], "")
+            ]
+          }
         ]
       }
-    ]
-  },
+    };
 
-  immigrant: {
-    title: "New-Country Career Launch",
-    persona: "New immigrants building a career in a new country",
-    blurb: "Your experience counts — it just needs translating: credentials, language, local norms, local network. This roadmap covers all four.",
-    weeks: "16–32 weeks",
-    phases: [
-      { main: N("Arrive & assess","Map what you're bringing and what the new market requires before spending money on courses.",[],
-          "The AI compares your home-country experience against local equivalents and flags what transfers directly."),
-        left: [
-          N("Credential inventory","Degrees, licenses, certificates, years of experience — list everything, even what seems irrelevant here.",[],""),
-          N("Language level check","Get an honest CEFR-style level for the local language and for professional English. Target level depends on the role, not perfection.",
-            ["Free placement tests","Professional-language courses directory"],"")
-        ],
-        right: [
-          N("Local job-market norms","How hiring works here: resume style, references, interview culture, salary talk. It differs more than people expect.",
-            ["Country hiring-culture guide"],""),
-          N("Work permit & basics","Confirm what you're allowed to work, tax registration, and any role-specific licensing rules.",
-            ["Official checklists (links)"],"")
-        ]
+    const ROADMAP_ORDER = ["homemaker", "immigrant", "restart", "switch40"];
+
+    /* ---------- Careers used by assessment demo ---------- */
+    const CAREERS = [
+      { name: "Project Coordinator", salary: "$48–62k", train: "8–12 wks", demand: "High demand", fits: ["organize"], rm: "homemaker" },
+      { name: "Bookkeeping & Payroll Assistant", salary: "$42–55k", train: "10–14 wks", demand: "Steady demand", fits: ["numbers", "organize"], rm: "homemaker" },
+      { name: "Customer Success Associate", salary: "$45–60k", train: "6–10 wks", demand: "High demand", fits: ["people", "talk"], rm: "restart" },
+      { name: "Care Coordinator (Healthcare)", salary: "$40–52k", train: "8–16 wks", demand: "Very high demand", fits: ["people"], rm: "homemaker" },
+      { name: "Data Analyst (entry)", salary: "$55–72k", train: "16–24 wks", demand: "High demand", fits: ["numbers"], rm: "switch40" },
+      { name: "Digital Marketing Assistant", salary: "$42–58k", train: "10–16 wks", demand: "Steady demand", fits: ["talk", "making"], rm: "immigrant" },
+      { name: "IT Support Specialist", salary: "$46–60k", train: "12–20 wks", demand: "High demand", fits: ["making", "people"], rm: "immigrant" },
+      { name: "QA Tester (entry)", salary: "$50–65k", train: "12–18 wks", demand: "Steady demand", fits: ["making", "organize"], rm: "restart" },
+      { name: "Sales Development Rep", salary: "$45–70k OTE", train: "4–8 wks", demand: "High demand", fits: ["talk"], rm: "switch40" }
+    ];
+
+    /* ---------- Assessment questions ---------- */
+    const QUIZ = [
+      {
+        q: "Which describes your situation best?", sub: "This picks your base roadmap.", key: "persona", opts: [
+          { k: "A", t: "I've been running a household and want to return to paid work", v: "homemaker" },
+          { k: "B", t: "I recently moved to a new country and need to rebuild my career", v: "immigrant" },
+          { k: "C", t: "I've been unemployed for a while and want a fresh start", v: "restart" },
+          { k: "D", t: "I'm 40+ and want to change careers", v: "switch40" }]
       },
-      { main: N("Choose a path","Decide between your original profession, an adjacent role, or a strategic re-entry role that gets you in the door fast.",[],""),
-        left: [
-          N("Degree transfer map","Some professions transfer with paperwork; some need re-licensing; some are easier to enter sideways. Know which yours is.",[],""),
-          N("In-demand shortlist","Roles with local shortage lists and visa-friendly employers move faster. Cross-check your skills against them.",
-            ["Shortage occupation lists (sample)"],"")
-        ],
-        right: [
-          N("Informational interviews","Talk to immigrants from your country already working in your field here. They know the real shortcuts.",
-            ["Expat community directory","Outreach templates"],""),
-          N("Commit to one target","One role, one target start date. Adjacent role now doesn't mean giving up the original profession forever.",[],"")
-        ]
+      {
+        q: "How long since your last paid job?", sub: "Used to calibrate the plan's pacing — there's no wrong answer.", key: "gap", opts: [
+          { k: "A", t: "Less than 1 year", v: "short" },
+          { k: "B", t: "1–3 years", v: "mid" },
+          { k: "C", t: "3–8 years", v: "long" },
+          { k: "D", t: "More than 8 years", v: "verylong" }]
       },
-      { main: N("Close the gap","Close the credibility gap the local market sees — recognition, local proof, professional language.",[],""),
-        left: [
-          N("Credential evaluation","Get degrees formally evaluated (WES-style) so employers don't have to guess what they're worth.",
-            ["Evaluation services directory"],""),
-          N("Local certification","One local certificate signals 'I operate in this system now' — often more valuable than another foreign one.",
-            ["Partner training-school catalog"],"")
-        ],
-        right: [
-          N("Professional language","Not general fluency — the vocabulary of your profession: meetings, emails, interviews.",
-            ["Role-specific phrase decks"],"The AI runs interview practice in the local language and corrects professional phrasing."),
-          N("Local experience","Volunteering, internships or project work — the first local reference breaks the 'no local experience' loop.",
-            ["NGO & volunteer partner list"],"")
-        ]
+      {
+        q: "What's your highest completed education?", sub: "Credentials from any country count.", key: "edu", opts: [
+          { k: "A", t: "Secondary school", v: "secondary" },
+          { k: "B", t: "Vocational training / apprenticeship", v: "vocational" },
+          { k: "C", t: "Bachelor's degree or higher", v: "degree" },
+          { k: "D", t: "Degree from abroad (not yet recognized here)", v: "foreign" }]
       },
-      { main: N("Go to market","Apply like a local: local-format documents, local networks, local interview style.",[],""),
-        left: [
-          N("Local-style resume","Rebuilt in the local format, with foreign employers explained in one line each ('largest retail bank in X').",
-            ["Country resume templates"],""),
-          N("LinkedIn localized","Headline and summary in the local market's language and keywords, location updated.",[],"")
-        ],
-        right: [
-          N("Immigrant networks","Meetups, professional immigrant associations, alumni groups — warm intros beat cold portals.",
-            ["Meetup & association directory"],""),
-          N("Interview culture practice","Practice the local small talk, self-presentation style and salary conversation until they feel natural.",[],"Mock interviews tuned to the local interview culture."),
-          N("Apply in batches","Track applications, iterate on what gets responses. Aim for referrals over cold applications.",
-            ["Application tracker"],"")
-        ]
+      {
+        q: "What kind of work sounds most like you?", sub: "Pick the one that fits best.", key: "interest", opts: [
+          { k: "A", t: "Helping and caring for people", v: "people" },
+          { k: "B", t: "Organizing, planning, keeping things on track", v: "organize" },
+          { k: "C", t: "Working with numbers and data", v: "numbers" },
+          { k: "D", t: "Building, fixing, or testing things", v: "making" }]
       },
-      { main: N("Land & grow","The first local job is a beachhead — use it to rebuild the career you actually want.",[],""),
-        left: [
-          N("Offer & contract basics","Understand local contract norms: probation, notice periods, benefits, union agreements.",[],"")
-        ],
-        right: [
-          N("Workplace culture onboarding","Feedback style, hierarchy, meetings, lunch culture — learn the unwritten rules deliberately.",[],""),
-          N("Grow your local network","Every month, one new professional contact. In two years your network is local — and so are your options.",[],"")
-        ]
+      {
+        q: "What constraints should the plan respect?", sub: "Your roadmap adapts to real life, not the other way round.", key: "constraint", opts: [
+          { k: "A", t: "Part-time only (school hours)", v: "parttime" },
+          { k: "B", t: "Remote / hybrid strongly preferred", v: "remote" },
+          { k: "C", t: "Evenings and weekends are my study time", v: "evenings" },
+          { k: "D", t: "I'm flexible — optimize for speed", v: "flexible" }]
       }
-    ]
-  },
+    ];
 
-  restart: {
-    title: "Back on Track",
-    persona: "Restarting after long-term unemployment",
-    blurb: "A long gap is a situation, not a verdict. This roadmap rebuilds routine, recent proof, and momentum — in that order.",
-    weeks: "10–20 weeks",
-    phases: [
-      { main: N("Reset","Start from an honest, blame-free baseline. Structure first, applications later.",[],""),
-        left: [
-          N("No-blame skills inventory","What you can do hasn't disappeared. List skills from every job, project and life period — dated honestly.",[],
-            "The AI rebuilds your work history conversationally, so you don't stare at a blank page."),
-          N("Routine & structure","Job search works as a part-time job with fixed hours. Set a weekly schedule before anything else.",
-            ["Weekly search schedule template"],"")
-        ],
-        right: [
-          N("Financial runway plan","Know your numbers and available support. Panic makes bad career decisions; a runway plan buys clear thinking.",
-            ["Benefits & support checklist (job center)"],""),
-          N("Wellbeing support","Long unemployment is hard on people. A peer group or counselor is a performance tool, not a luxury.",
-            ["Peer support circles (community)"],"")
-        ]
-      },
-      { main: N("Choose a path","Aim for a realistic re-entry role — the goal is recent employment, then leverage.",[],""),
-        left: [
-          N("Market scan","Which local sectors hire steadily and value reliability over pedigree? Start the search there.",
-            ["Local demand snapshot (sample data)"],""),
-          N("Adjacent-role mapping","Your old title may have moved on. Find its modern neighbors that still want your core skills.",[],"")
-        ],
-        right: [
-          N("Commit to one target","One re-entry role, one target date. Momentum beats optimization at this stage.",[],"")
-        ]
-      },
-      { main: N("Rebuild proof","Employers ask 'what have you done lately?' — build a recent answer in weeks, not years.",[],""),
-        left: [
-          N("Refresher course","A short course updates both your skills and your resume's most recent line.",
-            ["Partner training catalog","Job-center funded options"],""),
-          N("Freelance / volunteer gigs","Small paid gigs or structured volunteering create recent references and recent dates.",[],"")
-        ],
-        right: [
-          N("Portfolio of recent work","Collect the evidence: course certificate, gig outcomes, a project write-up. Recency is the product.",[],"")
-        ]
-      },
-      { main: N("Go to market","Apply with a story that starts now, not with the gap.",[],""),
-        left: [
-          N("Gap-positive resume","Lead with the recent course and gigs; state the gap in one calm line. No apology paragraph.",
-            ["Resume examples with long gaps"],""),
-          N("References refresh","Line up 2–3 people who will pick up the phone: past managers, course instructors, gig clients.",[],"")
-        ],
-        right: [
-          N("Agencies & job center","Staffing agencies and job-center partnerships fill re-entry roles fast — use them in parallel with direct applications.",
-            ["Partner agency list"],""),
-          N("Mock interviews","Rehearse the gap question until it's a 20-second non-event, then move to role questions.",[],
-            "AI mock interviews, unlimited retries, private.")
-        ]
-      },
-      { main: N("Land & grow","Convert the first job back into a stable trajectory.",[],""),
-        left: [
-          N("Trial-period plan","Most re-entry offers start with probation. Plan reliability signals: punctuality, early wins, asking good questions.",[],"")
-        ],
-        right: [
-          N("90-day check-ins","Monthly self-review with your coach or the AI: what's working, what's wobbly, what's next.",[],""),
-          N("Skill habit","One hour a week of learning, forever. It's the insurance policy against the next gap.",[],"")
-        ]
-      }
-    ]
-  },
+    /* ---------- State ---------- */
+    const store = {
+      get(k, fallback) { try { const v = localStorage.getItem("cn_" + k); return v ? JSON.parse(v) : fallback } catch (e) { return fallback } },
+      set(k, v) { try { localStorage.setItem("cn_" + k, JSON.stringify(v)) } catch (e) { } }
+    };
+    let quizState = { step: 0, answers: {} };
+    let currentRoadmapId = null;
+    let currentNode = null; /* {rmId, nodeId, phaseTitle, node} */
 
-  switch40: {
-    title: "Career Switch at 40+",
-    persona: "Experienced professionals changing direction",
-    blurb: "You're not starting over — you're repositioning twenty years of assets. This roadmap treats experience as leverage, not baggage.",
-    weeks: "16–28 weeks",
-    phases: [
-      { main: N("Take stock","Audit two decades of work for what transfers, what differentiates, and what you're done with.",[],
-          "The AI mines your history for patterns you can't see from inside: the skills that kept showing up in your best work."),
-        left: [
-          N("20-year skills audit","Separate the role from the skills. 'Retail manager' contains negotiation, P&L, hiring, logistics — those travel.",[],""),
-          N("Keep / leave list","What must the next chapter include, and what will you never do again? Write both lists.",[],"")
-        ],
-        right: [
-          N("Risk & runway","How many months can you fund a transition? Full switch, bridge job, or side-project-first — runway decides.",[],""),
-          N("Family alignment","A 40+ switch is a household decision. Get real agreement on money, time and stress before committing.",[],"")
-        ]
-      },
-      { main: N("Choose a path","Pick a direction where your domain knowledge is an unfair advantage, not a discarded asset.",[],""),
-        left: [
-          N("Age-friendly sectors scan","Some industries actively value experience: healthcare, skilled trades, compliance, customer success, education, project delivery.",
-            ["Sector demand snapshot (sample)"],""),
-          N("Leverage-your-domain map","The fastest switches keep the industry and change the function, or keep the function and change the industry — rarely both at once.",[],"")
-        ],
-        right: [
-          N("Test with a side project","Before quitting anything, spend 4 weekends doing the new thing in miniature. Cheap data, no regret.",[],""),
-          N("Commit to one target","One role, one thesis for why you'll win at it, one target date.",[],"")
-        ]
-      },
-      { main: N("Close the gap","Close the specific credibility gaps — with targeted upskilling, not another degree.",[],""),
-        left: [
-          N("Targeted upskilling","6–12 weeks of role-specific training beats a 2-year generic program at this stage of the game.",
-            ["Partner bootcamp & course catalog"],""),
-          N("Modern-tooling refresh","Learn the current tool stack of the target role — including working fluently with AI tools. Recency of tools is the cheapest credibility.",[],"")
-        ],
-        right: [
-          N("Credibility portfolio","A project that fuses old domain + new skill: e.g. a logistics veteran's supply-chain dashboard. Unfair advantage, visible.",[],"")
-        ]
-      },
-      { main: N("Go to market","Position experience as the product. You're selling judgment, reliability and a shorter ramp-up.",[],""),
-        left: [
-          N("Experience-forward resume","Lead with the last 10 years and the transition thesis. Summarize the rest — nobody needs 1998 in detail.",
-            ["Career-change resume examples"],""),
-          N("Former-colleague network","Twenty years of colleagues is the strongest asset you have. Tell them what you're looking for — specifically.",[],"")
-        ],
-        right: [
-          N("Seniority as asset pitch","Prepare the 60-second answer to 'why change now?' that lands as strength, not crisis.",[],
-            "The AI stress-tests your pitch with the toughest versions of the age question — legally askable or not."),
-          N("Interview reframing","Practice interviewing with people 15 years younger without either deference or condescension.",[],""),
-          N("Apply + consult in parallel","Freelance or consulting gigs in the new field often convert to offers — and pay during the search.",[],"")
-        ]
-      },
-      { main: N("Land & grow","Close the deal on value, then build the second-act career deliberately.",[],""),
-        left: [
-          N("Negotiate on value","Anchor on the problems you solve and the ramp-up you skip, not on years or titles.",[],"")
-        ],
-        right: [
-          N("First 90 days","Prove the transition thesis fast: one visible win that uses old domain + new role.",[],""),
-          N("Mentor others","Mentoring juniors builds your standing in the new field faster than anything else — and it's the part 40+ switchers are best at.",[],"")
-        ]
-      }
-    ]
-  }
-};
+    /* ---------- Utilities ---------- */
+    const app = document.getElementById("app");
+    function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") }
+    function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") }
+    function toast(msg) {
+      const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show");
+      clearTimeout(toast._h); toast._h = setTimeout(() => t.classList.remove("show"), 2200);
+    }
 
-const ROADMAP_ORDER = ["homemaker","immigrant","restart","switch40"];
+    /* ---------- Theme ---------- */
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      const root = document.documentElement;
+      const cur = root.getAttribute("data-theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const next = cur === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      store.set("theme", next);
+      if (currentRoadmapId) renderRoute(); /* re-render so SVG colors update if needed */
+    });
+    (function () { const t = store.get("theme", null); if (t) document.documentElement.setAttribute("data-theme", t) })();
 
-/* ---------- Careers used by assessment demo ---------- */
-const CAREERS = [
-  {name:"Project Coordinator", salary:"$48–62k", train:"8–12 wks", demand:"High demand", fits:["organize"], rm:"homemaker"},
-  {name:"Bookkeeping & Payroll Assistant", salary:"$42–55k", train:"10–14 wks", demand:"Steady demand", fits:["numbers","organize"], rm:"homemaker"},
-  {name:"Customer Success Associate", salary:"$45–60k", train:"6–10 wks", demand:"High demand", fits:["people","talk"], rm:"restart"},
-  {name:"Care Coordinator (Healthcare)", salary:"$40–52k", train:"8–16 wks", demand:"Very high demand", fits:["people"], rm:"homemaker"},
-  {name:"Data Analyst (entry)", salary:"$55–72k", train:"16–24 wks", demand:"High demand", fits:["numbers"], rm:"switch40"},
-  {name:"Digital Marketing Assistant", salary:"$42–58k", train:"10–16 wks", demand:"Steady demand", fits:["talk","making"], rm:"immigrant"},
-  {name:"IT Support Specialist", salary:"$46–60k", train:"12–20 wks", demand:"High demand", fits:["making","people"], rm:"immigrant"},
-  {name:"QA Tester (entry)", salary:"$50–65k", train:"12–18 wks", demand:"Steady demand", fits:["making","organize"], rm:"restart"},
-  {name:"Sales Development Rep", salary:"$45–70k OTE", train:"4–8 wks", demand:"High demand", fits:["talk"], rm:"switch40"}
-];
+    /* ---------- Router ---------- */
+    window.addEventListener("hashchange", renderRoute);
+    function route() {
+      const h = (location.hash || "#home").slice(1);
+      const parts = h.split("/");
+      return { name: parts[0] || "home", arg: parts[1] || null };
+    }
+    function nav(hash) { location.hash = hash }
 
-/* ---------- Assessment questions ---------- */
-const QUIZ = [
-  {q:"Which describes your situation best?", sub:"This picks your base roadmap.", key:"persona", opts:[
-    {k:"A", t:"I've been running a household and want to return to paid work", v:"homemaker"},
-    {k:"B", t:"I recently moved to a new country and need to rebuild my career", v:"immigrant"},
-    {k:"C", t:"I've been unemployed for a while and want a fresh start", v:"restart"},
-    {k:"D", t:"I'm 40+ and want to change careers", v:"switch40"}]},
-  {q:"How long since your last paid job?", sub:"Used to calibrate the plan's pacing — there's no wrong answer.", key:"gap", opts:[
-    {k:"A", t:"Less than 1 year", v:"short"},
-    {k:"B", t:"1–3 years", v:"mid"},
-    {k:"C", t:"3–8 years", v:"long"},
-    {k:"D", t:"More than 8 years", v:"verylong"}]},
-  {q:"What's your highest completed education?", sub:"Credentials from any country count.", key:"edu", opts:[
-    {k:"A", t:"Secondary school", v:"secondary"},
-    {k:"B", t:"Vocational training / apprenticeship", v:"vocational"},
-    {k:"C", t:"Bachelor's degree or higher", v:"degree"},
-    {k:"D", t:"Degree from abroad (not yet recognized here)", v:"foreign"}]},
-  {q:"What kind of work sounds most like you?", sub:"Pick the one that fits best.", key:"interest", opts:[
-    {k:"A", t:"Helping and caring for people", v:"people"},
-    {k:"B", t:"Organizing, planning, keeping things on track", v:"organize"},
-    {k:"C", t:"Working with numbers and data", v:"numbers"},
-    {k:"D", t:"Building, fixing, or testing things", v:"making"}]},
-  {q:"What constraints should the plan respect?", sub:"Your roadmap adapts to real life, not the other way round.", key:"constraint", opts:[
-    {k:"A", t:"Part-time only (school hours)", v:"parttime"},
-    {k:"B", t:"Remote / hybrid strongly preferred", v:"remote"},
-    {k:"C", t:"Evenings and weekends are my study time", v:"evenings"},
-    {k:"D", t:"I'm flexible — optimize for speed", v:"flexible"}]}
-];
+    function renderRoute() {
+      closeDrawer();
+      const r = route();
+      document.querySelectorAll(".navlink").forEach(a => {
+        const owns = a.dataset.route === r.name || (a.dataset.route === "roadmaps" && r.name === "roadmap");
+        a.classList.toggle("active", owns);
+      });
+      if (r.name === "home") return renderHome();
+      if (r.name === "roadmaps") return renderRoadmapList();
+      if (r.name === "roadmap" && ROADMAPS[r.arg]) return renderRoadmap(r.arg);
+      if (r.name === "assessment") return renderQuiz();
+      if (r.name === "partners") return renderPartners();
+      if (r.name === "strategy") return renderStrategy();
+      renderHome();
+    }
 
-/* ---------- State ---------- */
-const store = {
-  get(k, fallback){ try{const v=localStorage.getItem("cn_"+k); return v?JSON.parse(v):fallback}catch(e){return fallback} },
-  set(k, v){ try{localStorage.setItem("cn_"+k, JSON.stringify(v))}catch(e){} }
-};
-let quizState = { step:0, answers:{} };
-let currentRoadmapId = null;
-let currentNode = null; /* {rmId, nodeId, phaseTitle, node} */
+    /* ---------- Progress helpers ---------- */
+    function nodeIds(rmId) {
+      const ids = []; ROADMAPS[rmId].phases.forEach((p, pi) => {
+        ids.push(rmId + "/" + pi + "/main");
+        (p.left || []).forEach((n, i) => ids.push(rmId + "/" + pi + "/l" + i));
+        (p.right || []).forEach((n, i) => ids.push(rmId + "/" + pi + "/r" + i));
+      }); return ids;
+    }
+    function doneSet(rmId) { return new Set(store.get("done_" + rmId, [])) }
+    function saveDone(rmId, set) { store.set("done_" + rmId, [...set]) }
+    function progressOf(rmId) {
+      const ids = nodeIds(rmId), d = doneSet(rmId);
+      const done = ids.filter(i => d.has(i)).length;
+      return { done, total: ids.length, pct: ids.length ? Math.round(done / ids.length * 100) : 0 };
+    }
 
-/* ---------- Utilities ---------- */
-const app = document.getElementById("app");
-function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
-function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
-function toast(msg){
-  const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
-  clearTimeout(toast._h); toast._h=setTimeout(()=>t.classList.remove("show"),2200);
-}
-
-/* ---------- Theme ---------- */
-document.getElementById("themeToggle").addEventListener("click",()=>{
-  const root=document.documentElement;
-  const cur=root.getAttribute("data-theme") ||
-    (window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
-  const next=cur==="dark"?"light":"dark";
-  root.setAttribute("data-theme",next);
-  store.set("theme",next);
-  if(currentRoadmapId) renderRoute(); /* re-render so SVG colors update if needed */
-});
-(function(){const t=store.get("theme",null); if(t) document.documentElement.setAttribute("data-theme",t)})();
-
-/* ---------- Router ---------- */
-window.addEventListener("hashchange",renderRoute);
-function route(){
-  const h=(location.hash||"#home").slice(1);
-  const parts=h.split("/");
-  return {name:parts[0]||"home", arg:parts[1]||null};
-}
-function nav(hash){location.hash=hash}
-
-function renderRoute(){
-  closeDrawer();
-  const r=route();
-  document.querySelectorAll(".navlink").forEach(a=>{
-    const owns=a.dataset.route===r.name||(a.dataset.route==="roadmaps"&&r.name==="roadmap");
-    a.classList.toggle("active",owns);
-  });
-  if(r.name==="home") return renderHome();
-  if(r.name==="roadmaps") return renderRoadmapList();
-  if(r.name==="roadmap"&&ROADMAPS[r.arg]) return renderRoadmap(r.arg);
-  if(r.name==="assessment") return renderQuiz();
-  if(r.name==="partners") return renderPartners();
-  if(r.name==="strategy") return renderStrategy();
-  renderHome();
-}
-
-/* ---------- Progress helpers ---------- */
-function nodeIds(rmId){
-  const ids=[]; ROADMAPS[rmId].phases.forEach((p,pi)=>{
-    ids.push(rmId+"/"+pi+"/main");
-    (p.left||[]).forEach((n,i)=>ids.push(rmId+"/"+pi+"/l"+i));
-    (p.right||[]).forEach((n,i)=>ids.push(rmId+"/"+pi+"/r"+i));
-  }); return ids;
-}
-function doneSet(rmId){ return new Set(store.get("done_"+rmId,[])) }
-function saveDone(rmId,set){ store.set("done_"+rmId,[...set]) }
-function progressOf(rmId){
-  const ids=nodeIds(rmId), d=doneSet(rmId);
-  const done=ids.filter(i=>d.has(i)).length;
-  return {done, total:ids.length, pct: ids.length?Math.round(done/ids.length*100):0};
-}
-
-/* ---------- Home ---------- */
-function renderHome(){
-  const cards=ROADMAP_ORDER.map(id=>{
-    const rm=ROADMAPS[id], p=progressOf(id);
-    return `<a class="card" href="#roadmap/${id}">
+    /* ---------- Home ---------- */
+    function renderHome() {
+      const cards = ROADMAP_ORDER.map(id => {
+        const rm = ROADMAPS[id], p = progressOf(id);
+        return `<a class="card" href="#roadmap/${id}">
       <span class="tag">Roadmap</span>
       <h3>${esc(rm.title)}</h3>
       <p>${esc(rm.persona)}</p>
-      <div class="meta">${nodeIds(id).length} steps · ${esc(rm.weeks)}${p.done?` · ${p.pct}% done`:``}</div>
+      <div class="meta">${nodeIds(id).length} steps · ${esc(rm.weeks)}${p.done ? ` · ${p.pct}% done` : ``}</div>
     </a>`;
-  }).join("");
+      }).join("");
 
-  app.innerHTML=`
+      app.innerHTML = `
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
@@ -832,21 +1618,21 @@ function renderHome(){
     </div>
   </section>`;
 
-  drawMiniMap();
-}
+      drawMiniMap();
+    }
 
-function drawMiniMap(){
-  const host=document.getElementById("miniMap"); if(!host) return;
-  const nodes=[
-    {t:"Self-assessment", x:8,  y:10,  main:true, href:"#assessment"},
-    {t:"Transferable skills", x:52, y:2,  href:"#roadmap/homemaker"},
-    {t:"Pick a target role", x:26, y:33, main:true, href:"#roadmap/homemaker"},
-    {t:"Market reality check", x:66, y:28, href:"#roadmap/switch40"},
-    {t:"Close the skill gap", x:10, y:57, main:true, href:"#roadmap/restart"},
-    {t:"Portfolio project", x:58, y:52, href:"#roadmap/immigrant"},
-    {t:"Interviews → Offer", x:34, y:82, main:true, href:"#roadmap/homemaker"}
-  ];
-  host.innerHTML=`<svg viewBox="0 0 100 100" preserveAspectRatio="none">
+    function drawMiniMap() {
+      const host = document.getElementById("miniMap"); if (!host) return;
+      const nodes = [
+        { t: "Self-assessment", x: 8, y: 10, main: true, href: "#assessment" },
+        { t: "Transferable skills", x: 52, y: 2, href: "#roadmap/homemaker" },
+        { t: "Pick a target role", x: 26, y: 33, main: true, href: "#roadmap/homemaker" },
+        { t: "Market reality check", x: 66, y: 28, href: "#roadmap/switch40" },
+        { t: "Close the skill gap", x: 10, y: 57, main: true, href: "#roadmap/restart" },
+        { t: "Portfolio project", x: 58, y: 52, href: "#roadmap/immigrant" },
+        { t: "Interviews → Offer", x: 34, y: 82, main: true, href: "#roadmap/homemaker" }
+      ];
+      host.innerHTML = `<svg viewBox="0 0 100 100" preserveAspectRatio="none">
       <path d="M22 16 C 40 16, 40 8, 52 8"/>
       <path d="M18 18 C 18 30, 26 30, 34 37"/>
       <path d="M48 39 C 60 39, 60 33, 66 33"/>
@@ -854,87 +1640,95 @@ function drawMiniMap(){
       <path d="M32 63 C 50 63, 52 57, 58 57"/>
       <path d="M22 66 C 22 80, 32 82, 40 86"/>
     </svg>`+
-    nodes.map(n=>`<a class="mini-node${n.main?"":" alt"}" style="left:${n.x}%;top:${n.y}%" href="${n.href}">${esc(n.t)}</a>`).join("");
-}
+        nodes.map(n => `<a class="mini-node${n.main ? "" : " alt"}" style="left:${n.x}%;top:${n.y}%" href="${n.href}">${esc(n.t)}</a>`).join("");
+    }
 
-/* ---------- Roadmap list ---------- */
-function renderRoadmapList(){
-  const cards=ROADMAP_ORDER.map(id=>{
-    const rm=ROADMAPS[id], p=progressOf(id);
-    return `<a class="card" href="#roadmap/${id}">
+    /* ---------- Roadmap list ---------- */
+    function renderRoadmapList() {
+      const cards = ROADMAP_ORDER.map(id => {
+        const rm = ROADMAPS[id], p = progressOf(id);
+        return `<a class="card" href="#roadmap/${id}">
       <span class="tag">Interactive roadmap</span>
       <h3>${esc(rm.title)}</h3>
       <p>${esc(rm.blurb)}</p>
       <div class="meta">${nodeIds(id).length} steps · ${esc(rm.weeks)} · ${p.pct}% done</div>
     </a>`;
-  }).join("");
-  app.innerHTML=`<section class="block"><div class="wrap">
+      }).join("");
+      app.innerHTML = `<section class="block"><div class="wrap">
     <p class="eyebrow">Roadmaps</p>
     <h2>Pick the map that matches your journey.</h2>
     <p class="muted" style="max-width:42rem">Not sure which fits? The <a href="#assessment">3-minute assessment</a> picks one for you and personalizes it.</p>
     <div class="grid-2" style="margin-top:24px">${cards}</div>
   </div></section>`;
-}
+    }
 
-/* ---------- Roadmap renderer (roadmap.sh style) ---------- */
-const L = { W:980, centerX:490, mainW:260, mainH:58, childW:210, childH:52,
-            childGapY:16, phaseGap:64, sideGap:70 };
+    /* ---------- Roadmap renderer (roadmap.sh style) ---------- */
+    const L = {
+      W: 980, centerX: 490, mainW: 260, mainH: 58, childW: 210, childH: 52,
+      childGapY: 16, phaseGap: 64, sideGap: 70
+    };
 
-function layoutRoadmap(rmId){
-  const rm=ROADMAPS[rmId];
-  const nodes=[], wires=[], spine=[];
-  let y=30, prevBottom=0;
-  rm.phases.forEach((p,pi)=>{
-    const leftN=(p.left||[]), rightN=(p.right||[]);
-    const lh=leftN.length*L.childH+(leftN.length-1)*L.childGapY;
-    const rh=rightN.length*L.childH+(rightN.length-1)*L.childGapY;
-    const blockH=Math.max(L.mainH, lh, rh);
-    const mainY=y+(blockH-L.mainH)/2;
-    const mainX=L.centerX-L.mainW/2;
-    nodes.push({id:rmId+"/"+pi+"/main", x:mainX, y:mainY, w:L.mainW, h:L.mainH,
-                cls:"main", t:p.main.t, node:p.main, phase:p.main.t});
-    if(pi>0) spine.push({x:L.centerX, y1:prevBottom, y2:mainY});
-    /* children */
-    let ly=y+(blockH-lh)/2;
-    leftN.forEach((n,i)=>{
-      const cx=L.centerX-L.mainW/2-L.sideGap-L.childW;
-      nodes.push({id:rmId+"/"+pi+"/l"+i, x:cx, y:ly, w:L.childW, h:L.childH,
-                  cls:"child", t:n.t, node:n, phase:p.main.t});
-      wires.push({x1:mainX, y1:mainY+L.mainH/2, x2:cx+L.childW, y2:ly+L.childH/2});
-      ly+=L.childH+L.childGapY;
-    });
-    let ry=y+(blockH-rh)/2;
-    rightN.forEach((n,i)=>{
-      const cx=L.centerX+L.mainW/2+L.sideGap;
-      nodes.push({id:rmId+"/"+pi+"/r"+i, x:cx, y:ry, w:L.childW, h:L.childH,
-                  cls:"child", t:n.t, node:n, phase:p.main.t});
-      wires.push({x1:mainX+L.mainW, y1:mainY+L.mainH/2, x2:cx, y2:ry+L.childH/2});
-      ry+=L.childH+L.childGapY;
-    });
-    prevBottom=mainY+L.mainH;
-    y+=blockH+L.phaseGap;
-  });
-  return {nodes, wires, spine, height:y-L.phaseGap+40};
-}
+    function layoutRoadmap(rmId) {
+      const rm = ROADMAPS[rmId];
+      const nodes = [], wires = [], spine = [];
+      let y = 30, prevBottom = 0;
+      rm.phases.forEach((p, pi) => {
+        const leftN = (p.left || []), rightN = (p.right || []);
+        const lh = leftN.length * L.childH + (leftN.length - 1) * L.childGapY;
+        const rh = rightN.length * L.childH + (rightN.length - 1) * L.childGapY;
+        const blockH = Math.max(L.mainH, lh, rh);
+        const mainY = y + (blockH - L.mainH) / 2;
+        const mainX = L.centerX - L.mainW / 2;
+        nodes.push({
+          id: rmId + "/" + pi + "/main", x: mainX, y: mainY, w: L.mainW, h: L.mainH,
+          cls: "main", t: p.main.t, node: p.main, phase: p.main.t
+        });
+        if (pi > 0) spine.push({ x: L.centerX, y1: prevBottom, y2: mainY });
+        /* children */
+        let ly = y + (blockH - lh) / 2;
+        leftN.forEach((n, i) => {
+          const cx = L.centerX - L.mainW / 2 - L.sideGap - L.childW;
+          nodes.push({
+            id: rmId + "/" + pi + "/l" + i, x: cx, y: ly, w: L.childW, h: L.childH,
+            cls: "child", t: n.t, node: n, phase: p.main.t
+          });
+          wires.push({ x1: mainX, y1: mainY + L.mainH / 2, x2: cx + L.childW, y2: ly + L.childH / 2 });
+          ly += L.childH + L.childGapY;
+        });
+        let ry = y + (blockH - rh) / 2;
+        rightN.forEach((n, i) => {
+          const cx = L.centerX + L.mainW / 2 + L.sideGap;
+          nodes.push({
+            id: rmId + "/" + pi + "/r" + i, x: cx, y: ry, w: L.childW, h: L.childH,
+            cls: "child", t: n.t, node: n, phase: p.main.t
+          });
+          wires.push({ x1: mainX + L.mainW, y1: mainY + L.mainH / 2, x2: cx, y2: ry + L.childH / 2 });
+          ry += L.childH + L.childGapY;
+        });
+        prevBottom = mainY + L.mainH;
+        y += blockH + L.phaseGap;
+      });
+      return { nodes, wires, spine, height: y - L.phaseGap + 40 };
+    }
 
-function renderRoadmap(rmId){
-  currentRoadmapId=rmId;
-  const rm=ROADMAPS[rmId];
-  const lay=layoutRoadmap(rmId);
-  const d=doneSet(rmId);
-  const p=progressOf(rmId);
+    function renderRoadmap(rmId) {
+      currentRoadmapId = rmId;
+      const rm = ROADMAPS[rmId];
+      const lay = layoutRoadmap(rmId);
+      const d = doneSet(rmId);
+      const p = progressOf(rmId);
 
-  const wirePaths=lay.wires.map(w=>{
-    const mx=(w.x1+w.x2)/2;
-    return `<path class="wire" d="M ${w.x1} ${w.y1} C ${mx} ${w.y1}, ${mx} ${w.y2}, ${w.x2} ${w.y2}"/>`;
-  }).join("");
-  const spinePaths=lay.spine.map(s=>`<path class="spine" d="M ${s.x} ${s.y1} L ${s.x} ${s.y2}"/>`).join("");
+      const wirePaths = lay.wires.map(w => {
+        const mx = (w.x1 + w.x2) / 2;
+        return `<path class="wire" d="M ${w.x1} ${w.y1} C ${mx} ${w.y1}, ${mx} ${w.y2}, ${w.x2} ${w.y2}"/>`;
+      }).join("");
+      const spinePaths = lay.spine.map(s => `<path class="spine" d="M ${s.x} ${s.y1} L ${s.x} ${s.y2}"/>`).join("");
 
-  const nodeDivs=lay.nodes.map(n=>`
-    <button class="rm-node ${n.cls}${d.has(n.id)?" done":""}" data-node="${n.id}"
+      const nodeDivs = lay.nodes.map(n => `
+    <button class="rm-node ${n.cls}${d.has(n.id) ? " done" : ""}" data-node="${n.id}"
       style="left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px">${esc(n.t)}</button>`).join("");
 
-  app.innerHTML=`<div class="wrap">
+      app.innerHTML = `<div class="wrap">
     <div class="rm-head">
       <div class="grow">
         <p class="eyebrow">Interactive roadmap · ${esc(rm.weeks)}</p>
@@ -960,122 +1754,122 @@ function renderRoadmap(rmId){
     </div>
   </div>`;
 
-  const byId={}; lay.nodes.forEach(n=>byId[n.id]=n);
-  app.querySelectorAll(".rm-node").forEach(el=>{
-    el.addEventListener("click",()=>{
-      const n=byId[el.dataset.node];
-      openDrawer(rmId, n.id, n.phase, n.node);
+      const byId = {}; lay.nodes.forEach(n => byId[n.id] = n);
+      app.querySelectorAll(".rm-node").forEach(el => {
+        el.addEventListener("click", () => {
+          const n = byId[el.dataset.node];
+          openDrawer(rmId, n.id, n.phase, n.node);
+        });
+      });
+      document.getElementById("resetProg").addEventListener("click", () => {
+        saveDone(rmId, new Set()); renderRoadmap(rmId); toast("Progress reset");
+      });
+    }
+
+    function refreshProgressUI() {
+      if (!currentRoadmapId) return;
+      const p = progressOf(currentRoadmapId);
+      const pt = document.getElementById("progText"), pf = document.getElementById("progFill");
+      if (pt) pt.textContent = `${p.done} / ${p.total} done`;
+      if (pf) pf.style.width = p.pct + "%";
+    }
+
+    /* ---------- Drawer ---------- */
+    const drawer = document.getElementById("drawer");
+    const backdrop = document.getElementById("drawerBackdrop");
+    function openDrawer(rmId, nodeId, phaseTitle, node) {
+      currentNode = { rmId, nodeId, phaseTitle, node };
+      document.getElementById("drawerTag").textContent = phaseTitle;
+      document.getElementById("drawerTitle").textContent = node.t;
+      let html = `<p>${esc(node.d)}</p>`;
+      if (node.r && node.r.length) {
+        html += `<h4>Resources</h4><ul>${node.r.map(r => `<li>${esc(r)}</li>`).join("")}</ul>`;
+      }
+      if (node.tip) {
+        html += `<div class="ai-tip"><b>AI coach:</b> ${esc(node.tip)}</div>`;
+      }
+      document.getElementById("drawerBody").innerHTML = html;
+      updateDoneBtn();
+      drawer.classList.add("open"); backdrop.classList.add("open");
+    }
+    function updateDoneBtn() {
+      const btn = document.getElementById("doneBtn");
+      if (!currentNode) return;
+      const d = doneSet(currentNode.rmId);
+      const isDone = d.has(currentNode.nodeId);
+      btn.textContent = isDone ? "✓ Done — mark as pending" : "Mark as done";
+      btn.classList.toggle("undone", false);
+      btn.style.background = isDone ? "transparent" : "";
+      btn.style.color = isDone ? "var(--done)" : "";
+    }
+    document.getElementById("doneBtn").addEventListener("click", () => {
+      if (!currentNode) return;
+      const d = doneSet(currentNode.rmId);
+      const was = d.has(currentNode.nodeId);
+      if (was) d.delete(currentNode.nodeId); else d.add(currentNode.nodeId);
+      saveDone(currentNode.rmId, d);
+      const el = app.querySelector(`[data-node="${CSS.escape(currentNode.nodeId)}"]`);
+      if (el) el.classList.toggle("done", !was);
+      updateDoneBtn(); refreshProgressUI();
+      if (!was) toast("Nice — step done. Keep going!");
     });
-  });
-  document.getElementById("resetProg").addEventListener("click",()=>{
-    saveDone(rmId,new Set()); renderRoadmap(rmId); toast("Progress reset");
-  });
-}
+    function closeDrawer() { drawer.classList.remove("open"); backdrop.classList.remove("open") }
+    document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+    backdrop.addEventListener("click", closeDrawer);
+    window.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer() });
 
-function refreshProgressUI(){
-  if(!currentRoadmapId) return;
-  const p=progressOf(currentRoadmapId);
-  const pt=document.getElementById("progText"), pf=document.getElementById("progFill");
-  if(pt) pt.textContent=`${p.done} / ${p.total} done`;
-  if(pf) pf.style.width=p.pct+"%";
-}
-
-/* ---------- Drawer ---------- */
-const drawer=document.getElementById("drawer");
-const backdrop=document.getElementById("drawerBackdrop");
-function openDrawer(rmId,nodeId,phaseTitle,node){
-  currentNode={rmId,nodeId,phaseTitle,node};
-  document.getElementById("drawerTag").textContent=phaseTitle;
-  document.getElementById("drawerTitle").textContent=node.t;
-  let html=`<p>${esc(node.d)}</p>`;
-  if(node.r&&node.r.length){
-    html+=`<h4>Resources</h4><ul>${node.r.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>`;
-  }
-  if(node.tip){
-    html+=`<div class="ai-tip"><b>AI coach:</b> ${esc(node.tip)}</div>`;
-  }
-  document.getElementById("drawerBody").innerHTML=html;
-  updateDoneBtn();
-  drawer.classList.add("open"); backdrop.classList.add("open");
-}
-function updateDoneBtn(){
-  const btn=document.getElementById("doneBtn");
-  if(!currentNode) return;
-  const d=doneSet(currentNode.rmId);
-  const isDone=d.has(currentNode.nodeId);
-  btn.textContent=isDone?"✓ Done — mark as pending":"Mark as done";
-  btn.classList.toggle("undone",false);
-  btn.style.background=isDone?"transparent":"";
-  btn.style.color=isDone?"var(--done)":"";
-}
-document.getElementById("doneBtn").addEventListener("click",()=>{
-  if(!currentNode) return;
-  const d=doneSet(currentNode.rmId);
-  const was=d.has(currentNode.nodeId);
-  if(was) d.delete(currentNode.nodeId); else d.add(currentNode.nodeId);
-  saveDone(currentNode.rmId,d);
-  const el=app.querySelector(`[data-node="${CSS.escape(currentNode.nodeId)}"]`);
-  if(el) el.classList.toggle("done",!was);
-  updateDoneBtn(); refreshProgressUI();
-  if(!was) toast("Nice — step done. Keep going!");
-});
-function closeDrawer(){drawer.classList.remove("open");backdrop.classList.remove("open")}
-document.getElementById("drawerClose").addEventListener("click",closeDrawer);
-backdrop.addEventListener("click",closeDrawer);
-window.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer()});
-
-/* ---------- Assessment ---------- */
-function renderQuiz(){
-  if(quizState.step>=QUIZ.length){return renderQuizResult()}
-  const q=QUIZ[quizState.step];
-  const sel=quizState.answers[q.key];
-  app.innerHTML=`<div class="wrap quiz-shell">
+    /* ---------- Assessment ---------- */
+    function renderQuiz() {
+      if (quizState.step >= QUIZ.length) { return renderQuizResult() }
+      const q = QUIZ[quizState.step];
+      const sel = quizState.answers[q.key];
+      app.innerHTML = `<div class="wrap quiz-shell">
     <p class="eyebrow">Career assessment · demo</p>
-    <div class="quiz-progress">${QUIZ.map((_,i)=>`<span class="${i<=quizState.step?"on":""}"></span>`).join("")}</div>
+    <div class="quiz-progress">${QUIZ.map((_, i) => `<span class="${i <= quizState.step ? "on" : ""}"></span>`).join("")}</div>
     <div class="quiz-q">${esc(q.q)}</div>
     <div class="quiz-sub">${esc(q.sub)}</div>
-    ${q.opts.map(o=>`<button class="opt${sel===o.v?" selected":""}" data-v="${o.v}">
+    ${q.opts.map(o => `<button class="opt${sel === o.v ? " selected" : ""}" data-v="${o.v}">
         <span class="k">${o.k}</span><span>${esc(o.t)}</span></button>`).join("")}
     <div class="quiz-nav">
-      <button class="btn btn-ghost" id="qBack" ${quizState.step===0?"style='visibility:hidden'":""}>← Back</button>
-      <button class="btn btn-primary" id="qNext" ${sel?"":"disabled style='opacity:.45;cursor:not-allowed'"}>
-        ${quizState.step===QUIZ.length-1?"See my results":"Next →"}</button>
+      <button class="btn btn-ghost" id="qBack" ${quizState.step === 0 ? "style='visibility:hidden'" : ""}>← Back</button>
+      <button class="btn btn-primary" id="qNext" ${sel ? "" : "disabled style='opacity:.45;cursor:not-allowed'"}>
+        ${quizState.step === QUIZ.length - 1 ? "See my results" : "Next →"}</button>
     </div>
   </div>`;
-  app.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{
-    quizState.answers[q.key]=b.dataset.v; renderQuiz();
-  }));
-  document.getElementById("qBack").addEventListener("click",()=>{quizState.step=Math.max(0,quizState.step-1);renderQuiz()});
-  document.getElementById("qNext").addEventListener("click",()=>{
-    if(!quizState.answers[q.key]) return;
-    quizState.step++; renderQuiz();
-  });
-}
+      app.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+        quizState.answers[q.key] = b.dataset.v; renderQuiz();
+      }));
+      document.getElementById("qBack").addEventListener("click", () => { quizState.step = Math.max(0, quizState.step - 1); renderQuiz() });
+      document.getElementById("qNext").addEventListener("click", () => {
+        if (!quizState.answers[q.key]) return;
+        quizState.step++; renderQuiz();
+      });
+    }
 
-function renderQuizResult(){
-  const a=quizState.answers;
-  const persona=a.persona||"homemaker";
-  const rm=ROADMAPS[persona];
-  /* toy scoring for the demo */
-  const scored=CAREERS.map(c=>{
-    let s=62;
-    if(c.fits.includes(a.interest)) s+=24;
-    if(c.rm===persona) s+=9;
-    if(a.constraint==="remote"&&["Data Analyst (entry)","QA Tester (entry)","Digital Marketing Assistant","Customer Success Associate"].includes(c.name)) s+=5;
-    if(a.constraint==="parttime"&&["Care Coordinator (Healthcare)","Bookkeeping & Payroll Assistant","Project Coordinator"].includes(c.name)) s+=5;
-    if(a.edu==="foreign"&&c.name==="IT Support Specialist") s+=3;
-    return {...c, score:Math.min(s,97)};
-  }).sort((x,y)=>y.score-x.score).slice(0,3);
+    function renderQuizResult() {
+      const a = quizState.answers;
+      const persona = a.persona || "homemaker";
+      const rm = ROADMAPS[persona];
+      /* toy scoring for the demo */
+      const scored = CAREERS.map(c => {
+        let s = 62;
+        if (c.fits.includes(a.interest)) s += 24;
+        if (c.rm === persona) s += 9;
+        if (a.constraint === "remote" && ["Data Analyst (entry)", "QA Tester (entry)", "Digital Marketing Assistant", "Customer Success Associate"].includes(c.name)) s += 5;
+        if (a.constraint === "parttime" && ["Care Coordinator (Healthcare)", "Bookkeeping & Payroll Assistant", "Project Coordinator"].includes(c.name)) s += 5;
+        if (a.edu === "foreign" && c.name === "IT Support Specialist") s += 3;
+        return { ...c, score: Math.min(s, 97) };
+      }).sort((x, y) => y.score - x.score).slice(0, 3);
 
-  app.innerHTML=`<div class="wrap quiz-shell" style="max-width:760px">
+      app.innerHTML = `<div class="wrap quiz-shell" style="max-width:760px">
     <p class="eyebrow">Your results · sample data</p>
     <h2>Three realistic paths for you.</h2>
     <p class="muted">Based on your answers, the AI matched your profile against local market demand.
       In the full product this uses your complete skills interview and live job-posting data.</p>
-    ${scored.map((c,i)=>`
+    ${scored.map((c, i) => `
       <div class="card" style="margin-bottom:14px">
         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
-          <h3 style="margin:0">${i+1}. ${esc(c.name)}</h3>
+          <h3 style="margin:0">${i + 1}. ${esc(c.name)}</h3>
           <span class="result-match">${c.score}% match</span>
         </div>
         <div class="match-bar"><div class="match-fill" style="width:${c.score}%"></div></div>
@@ -1094,14 +1888,14 @@ function renderQuizResult(){
       </div>
     </div>
   </div>`;
-  document.getElementById("retake").addEventListener("click",()=>{
-    quizState={step:0,answers:{}}; renderQuiz();
-  });
-}
+      document.getElementById("retake").addEventListener("click", () => {
+        quizState = { step: 0, answers: {} }; renderQuiz();
+      });
+    }
 
-/* ---------- Partners ---------- */
-function renderPartners(){
-  app.innerHTML=`
+    /* ---------- Partners ---------- */
+    function renderPartners() {
+      app.innerHTML = `
   <section class="block">
     <div class="wrap">
       <p class="eyebrow">B2B2C partnerships</p>
@@ -1153,14 +1947,14 @@ function renderPartners(){
       </div>
     </div>
   </section>`;
-  document.getElementById("partnerForm").addEventListener("submit",e=>{
-    e.preventDefault(); toast("Demo only — no data was sent. Thanks for clicking!");
-  });
-}
+      document.getElementById("partnerForm").addEventListener("submit", e => {
+        e.preventDefault(); toast("Demo only — no data was sent. Thanks for clicking!");
+      });
+    }
 
-/* ---------- Strategy ---------- */
-function renderStrategy(){
-  app.innerHTML=`<section class="block"><div class="wrap" style="max-width:760px">
+    /* ---------- Strategy ---------- */
+    function renderStrategy() {
+      app.innerHTML = `<section class="block"><div class="wrap" style="max-width:760px">
     <p class="eyebrow">Internal · go-to-market roadmap</p>
     <h2>How Career Navigator reaches the market.</h2>
     <p class="muted">Four phases, each building the asset the next one needs: interviews → partners → audience → product-led growth.</p>
@@ -1196,18 +1990,19 @@ function renderStrategy(){
       </div>
     </div>
   </div></section>`;
-}
+    }
 
-/* ---------- Footer ---------- */
-const footer=document.createElement("footer");
-footer.className="site";
-footer.innerHTML=`<div class="wrap">
+    /* ---------- Footer ---------- */
+    const footer = document.createElement("footer");
+    footer.className = "site";
+    footer.innerHTML = `<div class="wrap">
   <span>Career Navigator — clickable prototype. All numbers and resources are sample data.</span>
   <span class="mono" style="font-size:.75rem">home · roadmaps · assessment · partners · strategy</span>
 </div>`;
-document.body.insertBefore(footer, document.getElementById("drawerBackdrop"));
+    document.body.insertBefore(footer, document.getElementById("drawerBackdrop"));
 
-renderRoute();
-</script>
+    renderRoute();
+  </script>
 </body>
+
 </html>
