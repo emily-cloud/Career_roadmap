@@ -1833,6 +1833,18 @@
     let currentNode = null; /* {rmId, nodeId, phaseTitle, node} */
     let currentLay = null;
 
+    /* ---------- Lead capture (emails the team) ---------- */
+    const LEAD_EMAIL = "emilyaiai86@gmail.com";
+    async function sendLead(subject, data) {
+      const res = await fetch("https://formsubmit.co/ajax/" + LEAD_EMAIL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ _subject: subject, _template: "table", ...data })
+      });
+      if (!res.ok) throw new Error("send failed: " + res.status);
+      return res.json();
+    }
+
     /* ---------- Utilities ---------- */
     const app = document.getElementById("app");
     function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") }
@@ -2308,9 +2320,39 @@
         <button class="btn btn-ghost" id="retake">Retake assessment</button>
       </div>
     </div>
+    <div class="card" style="margin-top:14px">
+      <span class="tag">Save your results</span>
+      <h3>Email me my matches</h3>
+      <form id="resultForm" style="margin-top:10px">
+        <div class="field"><label for="rf-email">Your email</label>
+          <input id="rf-email" type="email" required placeholder="you@example.com"></div>
+        <button class="btn btn-gold" type="submit" style="margin-top:12px;width:100%">Send my results</button>
+      </form>
+      <p class="muted" style="font-size:.75rem;margin:10px 0 0">Your answers and matches go to the Career Navigator team, who will follow up personally during this pilot phase.</p>
+    </div>
   </div>`;
       document.getElementById("retake").addEventListener("click", () => {
         quizState = { step: 0, answers: {} }; renderQuiz();
+      });
+      document.getElementById("resultForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const btn = e.target.querySelector("button[type=submit]");
+        btn.disabled = true; btn.textContent = "Sending…";
+        const data = { visitor_email: document.getElementById("rf-email").value };
+        QUIZ.forEach(q => {
+          const o = q.opts.find(o => o.v === a[q.key]);
+          data[q.key] = o ? o.t : "—";
+        });
+        data.top_matches = scored.map((c, i) => `${i + 1}. ${c.name} (${band(c.score)})`).join(" · ");
+        data.roadmap = rm.title;
+        try {
+          await sendLead("Career Navigator — assessment results for " + data.visitor_email, data);
+          toast("Sent! Check your inbox soon.");
+          e.target.reset();
+        } catch (err) {
+          toast("Couldn't send right now — please email " + LEAD_EMAIL);
+        }
+        btn.disabled = false; btn.textContent = "Send my results";
       });
       requestAnimationFrame(() => document.querySelectorAll(".match-fill").forEach(f => { f.style.width = f.dataset.w + "%"; }));
     }
@@ -2364,13 +2406,29 @@
           </div>
           <div class="field" style="margin-top:12px"><label for="pf-msg">What would a successful pilot look like?</label>
             <textarea id="pf-msg" rows="3" placeholder="e.g. 30 returners activated, 10 placements in 6 months"></textarea></div>
-          <button class="btn btn-primary" type="submit" style="margin-top:14px;width:100%">Request pilot (demo)</button>
+          <button class="btn btn-primary" type="submit" style="margin-top:14px;width:100%">Request pilot</button>
         </form>
       </div>
     </div>
   </section>`;
-      document.getElementById("partnerForm").addEventListener("submit", e => {
-        e.preventDefault(); toast("Demo only — no data was sent. Thanks for clicking!");
+      document.getElementById("partnerForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const btn = e.target.querySelector("button[type=submit]");
+        btn.disabled = true; btn.textContent = "Sending…";
+        try {
+          await sendLead("Career Navigator — pilot request from " + document.getElementById("pf-org").value, {
+            name: document.getElementById("pf-name").value,
+            organization: document.getElementById("pf-org").value,
+            work_email: document.getElementById("pf-email").value,
+            organization_type: document.getElementById("pf-type").value,
+            pilot_goals: document.getElementById("pf-msg").value
+          });
+          toast("Request sent — we'll be in touch soon!");
+          e.target.reset();
+        } catch (err) {
+          toast("Couldn't send right now — please email " + LEAD_EMAIL);
+        }
+        btn.disabled = false; btn.textContent = "Request pilot";
       });
     }
 
