@@ -1420,6 +1420,65 @@
       .journey-viz .jv-line { stroke-dashoffset: 0; }
       .journey-viz .jv-pt { opacity: 1; }
     }
+
+    /* ---------- Avatars ---------- */
+    .avatar {
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      font-weight: 800;
+      color: #14231D;
+      border: 2px solid var(--edge);
+      box-shadow: 1.5px 1.5px 0 var(--edge);
+      font-family: 'Bricolage Grotesque', ui-sans-serif, sans-serif;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .avatar-sm {
+      width: 26px;
+      height: 26px;
+      font-size: .68rem;
+    }
+
+    .avatar-lg {
+      width: 64px;
+      height: 64px;
+      font-size: 1.5rem;
+      box-shadow: 3px 3px 0 var(--edge);
+    }
+
+    #navAccount {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .swatch-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--edge);
+      cursor: pointer;
+      padding: 0;
+      transition: transform .1s ease, box-shadow .1s ease;
+    }
+
+    .swatch:hover {
+      transform: translate(-1px, -1px);
+    }
+
+    .swatch.selected {
+      box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--mint);
+      transform: scale(1.05);
+    }
   </style>
 </head>
 
@@ -1437,6 +1496,7 @@
       <a class="navlink" data-route="roadmaps" href="#roadmaps">Roadmaps</a>
       <a class="navlink" data-route="assessment" href="#assessment">Assessment</a>
       <a class="navlink" data-route="partners" href="#partners">Partners</a>
+      <a class="navlink" data-route="account" href="#account" id="navAccount">Sign in</a>
 
       <button class="theme-btn" id="themeToggle" aria-label="Toggle dark mode">◐</button>
     </div>
@@ -1845,6 +1905,43 @@
       return res.json();
     }
 
+    /* ---------- Accounts (browser-only, no backend) ---------- */
+    function getUsers() { return store.get("users", []) }
+    function saveUsers(u) { store.set("users", u) }
+    function currentUser() {
+      const s = store.get("session", null);
+      return s ? getUsers().find(u => u.email === s) || null : null;
+    }
+    async function hashPw(pw) {
+      if (window.crypto && crypto.subtle) {
+        const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pw));
+        return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
+      }
+      let h = 0;
+      for (const c of pw) h = (h * 31 + c.charCodeAt(0)) | 0;
+      return "x" + h;
+    }
+    const AVATAR_COLORS = ["#4EC7A5", "#F7C948", "#8FD675", "#7BA8F0", "#F0A175", "#C9A0EA"];
+    function avatarColor(u) {
+      if (u.color) return u.color;
+      let h = 0;
+      for (const c of u.email) h = (h * 31 + c.charCodeAt(0)) | 0;
+      return AVATAR_COLORS[Math.abs(h) % AVATAR_COLORS.length];
+    }
+    function initialsOf(name) {
+      const parts = name.trim().split(/\s+/);
+      return ((parts[0] || " ")[0] + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();
+    }
+    function avatarHtml(u, cls) {
+      return `<span class="avatar ${cls}" style="background:${avatarColor(u)}" aria-hidden="true">${esc(initialsOf(u.name))}</span>`;
+    }
+    function updateNavAccount() {
+      const el = document.getElementById("navAccount");
+      if (!el) return;
+      const u = currentUser();
+      el.innerHTML = u ? avatarHtml(u, "avatar-sm") + esc(u.name.split(" ")[0]) : "Sign in";
+    }
+
     /* ---------- Utilities ---------- */
     const app = document.getElementById("app");
     function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") }
@@ -1888,7 +1985,9 @@
       else if (r.name === "assessment") renderQuiz();
       else if (r.name === "partners") renderPartners();
       else if (r.name === "strategy") renderStrategy();
+      else if (r.name === "account") renderAccount();
       else renderHome();
+      updateNavAccount();
       armMotion();
     }
 
@@ -2282,6 +2381,7 @@
       const a = quizState.answers;
       const persona = a.persona || "homemaker";
       const rm = ROADMAPS[persona];
+      const cu = currentUser();
       /* toy scoring for the demo */
       const band = s => s >= 86 ? "Strong match" : s >= 75 ? "Good match" : "Worth exploring";
       const scored = CAREERS.map(c => {
@@ -2325,7 +2425,7 @@
       <h3>Email me my matches</h3>
       <form id="resultForm" style="margin-top:10px">
         <div class="field"><label for="rf-email">Your email</label>
-          <input id="rf-email" type="email" required placeholder="you@example.com"></div>
+          <input id="rf-email" type="email" required placeholder="you@example.com" value="${cu ? esc(cu.email) : ""}"></div>
         <button class="btn btn-gold" type="submit" style="margin-top:12px;width:100%">Send my results</button>
       </form>
       <p class="muted" style="font-size:.75rem;margin:10px 0 0">Your answers and matches go to the Career Navigator team, who will follow up personally during this pilot phase.</p>
@@ -2355,6 +2455,152 @@
         btn.disabled = false; btn.textContent = "Send my results";
       });
       requestAnimationFrame(() => document.querySelectorAll(".match-fill").forEach(f => { f.style.width = f.dataset.w + "%"; }));
+    }
+
+    /* ---------- Account ---------- */
+    function renderAccount() {
+      const u = currentUser();
+      if (u) {
+        const rows = ROADMAP_ORDER.map(id => {
+          const rm = ROADMAPS[id], p = progressOf(id);
+          return `<div style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+          <a href="#roadmap/${id}" style="font-weight:700">${esc(rm.title)}</a>
+          <span class="mono muted" style="font-size:.75rem">${p.done}/${p.total} steps</span>
+        </div>
+        <div class="match-bar"><div class="match-fill" style="width:${p.pct}%"></div></div>
+      </div>`;
+        }).join("");
+        app.innerHTML = `<div class="wrap quiz-shell" style="max-width:720px">
+      <p class="eyebrow">Your basecamp</p>
+      <h2>Welcome back, ${esc(u.name.split(" ")[0])}.</h2>
+      <div class="card" style="margin-bottom:16px">
+        <span class="tag">Profile</span>
+        <div style="display:flex;align-items:center;gap:16px;margin-top:10px">
+          ${avatarHtml(u, "avatar-lg")}
+          <div>
+            <h3 style="margin:0">${esc(u.name)}</h3>
+            <p style="margin:2px 0 0">${esc(u.email)}${u.situation && ROADMAPS[u.situation] ? " · " + esc(ROADMAPS[u.situation].persona) : ""}</p>
+          </div>
+        </div>
+        <div class="cta-row" style="margin-top:12px">
+          ${u.situation && ROADMAPS[u.situation]
+            ? `<a class="btn btn-primary" href="#roadmap/${u.situation}">Continue my roadmap</a>`
+            : `<a class="btn btn-primary" href="#assessment">Take the assessment</a>`}
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <span class="tag">Trail progress</span>
+        <h3 style="margin-bottom:14px">Your roadmaps</h3>
+        ${rows}
+      </div>
+      <div class="cta-row">
+        <button class="btn btn-ghost" id="signOut">Sign out</button>
+        <button class="btn btn-ghost" id="deleteAcct">Delete my account</button>
+      </div>
+      <p class="muted" style="font-size:.75rem;margin-top:14px">Prototype note: your account and progress live only in this browser's local storage — nothing is stored on a server.</p>
+    </div>`;
+        document.getElementById("signOut").addEventListener("click", () => {
+          store.set("session", null); updateNavAccount(); toast("Signed out"); renderAccount();
+        });
+        document.getElementById("deleteAcct").addEventListener("click", () => {
+          saveUsers(getUsers().filter(x => x.email !== u.email));
+          store.set("session", null); updateNavAccount();
+          toast("Account deleted from this browser"); renderAccount();
+        });
+        return;
+      }
+      app.innerHTML = `<div class="wrap quiz-shell" style="max-width:880px">
+    <p class="eyebrow">Your basecamp</p>
+    <h2>Create your free account.</h2>
+    <p class="muted" style="max-width:40rem">An account keeps your roadmap progress tied to you in this browser — and gives your future coach a head start.</p>
+    <div class="grid-2" style="margin-top:20px;align-items:start">
+      <div class="card">
+        <span class="tag">New here</span>
+        <h3>Sign up</h3>
+        <form id="regForm" style="margin-top:10px">
+          <div class="field" style="margin-bottom:10px"><label for="reg-name">Name</label>
+            <input id="reg-name" required placeholder="Your name"></div>
+          <div class="field" style="margin-bottom:10px"><label for="reg-email">Email</label>
+            <input id="reg-email" type="email" required placeholder="you@example.com"></div>
+          <div class="field" style="margin-bottom:10px"><label for="reg-pw">Password</label>
+            <input id="reg-pw" type="password" required minlength="6" placeholder="At least 6 characters"></div>
+          <div class="field" style="margin-bottom:10px"><label>Avatar color</label>
+            <div class="swatch-row" id="swatchRow" role="radiogroup" aria-label="Avatar color"></div></div>
+          <div class="field" style="margin-bottom:10px"><label for="reg-sit">Your situation</label>
+            <select id="reg-sit">
+              <option value="">I'll decide later</option>
+              <option value="homemaker">Returning after running a household</option>
+              <option value="immigrant">New to this country</option>
+              <option value="restart">Restarting after unemployment</option>
+              <option value="switch40">Changing careers at 40+</option>
+            </select></div>
+          <button class="btn btn-primary" type="submit" style="width:100%;margin-top:6px">Create account</button>
+        </form>
+      </div>
+      <div class="card">
+        <span class="tag">Been here before</span>
+        <h3>Sign in</h3>
+        <form id="loginForm" style="margin-top:10px">
+          <div class="field" style="margin-bottom:10px"><label for="li-email">Email</label>
+            <input id="li-email" type="email" required placeholder="you@example.com"></div>
+          <div class="field" style="margin-bottom:10px"><label for="li-pw">Password</label>
+            <input id="li-pw" type="password" required></div>
+          <button class="btn btn-gold" type="submit" style="width:100%;margin-top:6px">Sign in</button>
+        </form>
+      </div>
+    </div>
+    <p class="muted" style="font-size:.75rem;margin-top:14px">Prototype note: accounts are stored only in this browser (local storage), so use a throwaway password.</p>
+  </div>`;
+      let regColor = AVATAR_COLORS[0];
+      const swatchRow = document.getElementById("swatchRow");
+      AVATAR_COLORS.forEach((c, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "swatch" + (i === 0 ? " selected" : "");
+        b.style.background = c;
+        b.setAttribute("role", "radio");
+        b.setAttribute("aria-checked", i === 0 ? "true" : "false");
+        b.setAttribute("aria-label", "Avatar color " + (i + 1));
+        b.addEventListener("click", () => {
+          regColor = c;
+          swatchRow.querySelectorAll(".swatch").forEach(s => { s.classList.remove("selected"); s.setAttribute("aria-checked", "false"); });
+          b.classList.add("selected");
+          b.setAttribute("aria-checked", "true");
+        });
+        swatchRow.appendChild(b);
+      });
+      document.getElementById("regForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const name = document.getElementById("reg-name").value.trim();
+        const email = document.getElementById("reg-email").value.trim().toLowerCase();
+        const sit = document.getElementById("reg-sit").value;
+        if (getUsers().some(x => x.email === email)) {
+          toast("That email already has an account — sign in instead."); return;
+        }
+        const pw = await hashPw(document.getElementById("reg-pw").value);
+        const users = getUsers();
+        users.push({ name, email, pw, situation: sit, color: regColor });
+        saveUsers(users);
+        store.set("session", email);
+        updateNavAccount();
+        sendLead("Career Navigator — new registration: " + email,
+          { name, email, situation: sit && ROADMAPS[sit] ? ROADMAPS[sit].persona : "undecided" }).catch(() => {});
+        toast("Welcome, " + name.split(" ")[0] + "!");
+        renderAccount();
+      });
+      document.getElementById("loginForm").addEventListener("submit", async e => {
+        e.preventDefault();
+        const email = document.getElementById("li-email").value.trim().toLowerCase();
+        const user = getUsers().find(x => x.email === email);
+        if (!user) { toast("No account found for that email in this browser."); return; }
+        const pw = await hashPw(document.getElementById("li-pw").value);
+        if (pw !== user.pw) { toast("Wrong password — try again."); return; }
+        store.set("session", email);
+        updateNavAccount();
+        toast("Welcome back, " + user.name.split(" ")[0] + "!");
+        renderAccount();
+      });
     }
 
     /* ---------- Partners ---------- */
