@@ -1206,6 +1206,52 @@
       outline: none
     }
 
+    /* ---------- Live roadmap updates & celebration ---------- */
+    function updateRoadmapUI() {
+      if (!currentLay || !currentRoadmapId) return;
+      const d = doneSet(currentRoadmapId);
+      const nn = currentLay.nodes.find(n => !d.has(n.id));
+      const title = document.querySelector(".next-step .ns-title");
+      const label = document.querySelector(".next-step .ns-label");
+      const btn = document.getElementById("nextStepBtn");
+      if (title) {
+        if (nn) {
+          title.textContent = nn.t;
+          if (label) label.textContent = "Your next step";
+          if (btn) { btn.style.display = ""; btn.onclick = () => openDrawer(currentRoadmapId, nn.id, nn.phase, nn.node); }
+        } else {
+          title.textContent = "Every step is done — flag planted. On to the new job!";
+          if (label) label.textContent = "Trail complete";
+          if (btn) btn.style.display = "none";
+        }
+      }
+      const phaseIds = {};
+      currentLay.nodes.forEach(n => { const pi = n.id.split("/")[1]; (phaseIds[pi] = phaseIds[pi] || []).push(n.id); });
+      currentLay.nodes.filter(n => n.cls === "main").forEach(m => {
+        const pi = m.id.split("/")[1];
+        const chip = document.querySelector(`[data-node="${CSS.escape(m.id)}"] .phase-chip`);
+        if (chip) chip.textContent = `${phaseIds[pi].filter(i => d.has(i)).length}/${phaseIds[pi].length}`;
+      });
+    }
+
+    function celebrate() {
+      toast("Flag planted — roadmap complete!");
+      if (reduceMotion) return;
+      const c = document.createElement("div");
+      c.className = "confetti";
+      const colors = ["var(--gold)", "var(--mint)", "var(--card)"];
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement("i");
+        p.style.left = (Math.random() * 100) + "%";
+        p.style.background = colors[i % 3];
+        p.style.animationDuration = (1.4 + Math.random() * 1.3) + "s";
+        p.style.animationDelay = (Math.random() * .5) + "s";
+        c.appendChild(p);
+      }
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 3400);
+    }
+
     /* ---------- Motion ---------- */
     .reveal {
       opacity: 0;
@@ -1230,6 +1276,145 @@
 
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ---------- Visual graphics & celebration ---------- */
+    .mini-map svg path {
+      animation: trailIn .5s ease backwards;
+    }
+
+    @keyframes trailIn {
+      from { opacity: 0; }
+      to { opacity: .65; }
+    }
+
+    .mini-flag {
+      position: absolute;
+      width: 26px;
+      height: 30px;
+      animation: flagIn .45s cubic-bezier(.2, .9, .3, 1.4) 1.35s backwards;
+    }
+
+    @keyframes flagIn {
+      from { opacity: 0; transform: scale(.5) translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .journey-viz {
+      border: 2px solid var(--edge);
+      border-radius: 16px;
+      background: var(--card);
+      box-shadow: var(--card-shadow);
+      padding: 20px 18px 10px;
+      margin-top: 26px;
+      overflow: hidden;
+    }
+
+    .journey-viz svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .journey-viz .jv-line {
+      stroke: var(--ink);
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      transition: stroke-dashoffset 1.9s ease .25s;
+    }
+
+    .journey-viz.in .jv-line {
+      stroke-dashoffset: 0;
+    }
+
+    .journey-viz .jv-pt {
+      opacity: 0;
+      transition: opacity .45s ease;
+    }
+
+    .journey-viz.in .jv-pt {
+      opacity: 1;
+    }
+
+    .journey-viz circle {
+      fill: var(--gold);
+      stroke: var(--edge);
+      stroke-width: 2;
+    }
+
+    .journey-viz text {
+      fill: var(--muted);
+      font: 12px ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    .phase-chip {
+      position: absolute;
+      bottom: -12px;
+      right: -12px;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .62rem;
+      font-weight: 700;
+      background: var(--card);
+      color: var(--ink);
+      border: 2px solid var(--edge);
+      border-radius: 99px;
+      padding: 1px 8px;
+      pointer-events: none;
+    }
+
+    @keyframes checkPop {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .rm-node.done::after {
+      animation: checkPop .3s ease;
+    }
+
+    .match-fill {
+      transition: width .9s cubic-bezier(.2, .8, .2, 1) .15s;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .quiz-anim {
+      animation: fadeSlide .28s ease;
+    }
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 300;
+      overflow: hidden;
+    }
+
+    .confetti i {
+      position: absolute;
+      top: -22px;
+      width: 10px;
+      height: 14px;
+      border: 1.5px solid var(--edge);
+      border-radius: 2px;
+      animation: confFall linear forwards;
+    }
+
+    @keyframes confFall {
+      to { transform: translateY(112vh) rotate(560deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mini-map svg path { opacity: .65; }
+      .mini-flag { opacity: 1; }
+      .journey-viz .jv-line { stroke-dashoffset: 0; }
+      .journey-viz .jv-pt { opacity: 1; }
     }
   </style>
 </head>
@@ -1642,6 +1827,7 @@
     let quizState = { step: 0, answers: {} };
     let currentRoadmapId = null;
     let currentNode = null; /* {rmId, nodeId, phaseTitle, node} */
+    let currentLay = null;
 
     /* ---------- Utilities ---------- */
     const app = document.getElementById("app");
@@ -1774,6 +1960,37 @@
     </div>
   </section>
 
+  <section class="block">
+    <div class="wrap">
+      <p class="eyebrow">The honest shape of a comeback</p>
+      <h2>Every trail has a dip. We plan for it.</h2>
+      <p class="muted" style="max-width:40rem">Real re-entries aren't straight lines — a few weeks in, applications are out
+        and replies are slow. Your roadmap expects that dip and schedules support, community and small wins exactly there.</p>
+      <div class="journey-viz reveal" role="img" aria-label="Illustration of a comeback journey: progress rises, dips in the middle, then climbs to an offer marked with a flag.">
+        <svg viewBox="0 0 900 270">
+          <path class="jv-line" pathLength="100" d="M30 205 C 120 165, 170 155, 230 170 C 290 185, 330 215, 400 205 C 470 195, 520 125, 600 105 C 660 90, 700 72, 788 50"></path>
+          <g class="jv-pt" style="transition-delay:.5s">
+            <circle cx="30" cy="205" r="6"></circle>
+            <text x="14" y="238" text-anchor="start">day 1 — assessment</text>
+          </g>
+          <g class="jv-pt" style="transition-delay:1s">
+            <circle cx="400" cy="205" r="6"></circle>
+            <text x="400" y="238" text-anchor="middle">the dip (planned for)</text>
+          </g>
+          <g class="jv-pt" style="transition-delay:1.5s">
+            <circle cx="600" cy="105" r="6"></circle>
+            <text x="600" y="80" text-anchor="middle">momentum — interviews</text>
+          </g>
+          <g class="jv-pt" style="transition-delay:2s">
+            <line x1="788" y1="50" x2="788" y2="12" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"></line>
+            <polygon points="791,12 830,22 791,32" fill="var(--gold)" stroke="var(--edge)" stroke-width="2" stroke-linejoin="round"></polygon>
+            <text x="788" y="70" text-anchor="middle">offer</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
   <section class="block b2b-strip">
     <div class="wrap grid-2" style="align-items:center">
       <div>
@@ -1806,15 +2023,19 @@
         { t: "Portfolio project", x: 58, y: 52, href: "#roadmap/immigrant" },
         { t: "Interviews → Offer", x: 34, y: 82, main: true, href: "#roadmap/homemaker" }
       ];
-      host.innerHTML = `<svg viewBox="0 0 100 100" preserveAspectRatio="none">
-      <path d="M22 16 C 40 16, 40 8, 52 8"/>
-      <path d="M18 18 C 18 30, 26 30, 34 37"/>
-      <path d="M48 39 C 60 39, 60 33, 66 33"/>
-      <path d="M32 42 C 24 50, 22 52, 20 60"/>
-      <path d="M32 63 C 50 63, 52 57, 58 57"/>
-      <path d="M22 66 C 22 80, 32 82, 40 86"/>
+      const trails = [
+        "M22 16 C 40 16, 40 8, 52 8", "M18 18 C 18 30, 26 30, 34 37",
+        "M48 39 C 60 39, 60 33, 66 33", "M32 42 C 24 50, 22 52, 20 60",
+        "M32 63 C 50 63, 52 57, 58 57", "M22 66 C 22 80, 32 82, 40 86"
+      ];
+      host.innerHTML = `<svg viewBox="0 0 100 100" preserveAspectRatio="none">${trails.map((d, i) =>
+        `<path d="${d}" style="animation-delay:${(.25 + i * .18).toFixed(2)}s"/>`).join("")}
     </svg>`+
-        nodes.map(n => `<a class="mini-node${n.main ? "" : " alt"}" style="left:${n.x}%;top:${n.y}%" href="${n.href}">${esc(n.t)}</a>`).join("");
+        nodes.map(n => `<a class="mini-node${n.main ? "" : " alt"}" style="left:${n.x}%;top:${n.y}%" href="${n.href}">${esc(n.t)}</a>`).join("") +
+        `<svg class="mini-flag" style="left:73%;top:74%" viewBox="0 0 26 30" aria-hidden="true">
+      <line x1="4" y1="2" x2="4" y2="28" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"></line>
+      <polygon points="7,2.5 24,8 7,13.5" fill="var(--gold)" stroke="var(--edge)" stroke-width="1.6" stroke-linejoin="round"></polygon>
+    </svg>`;
     }
 
     /* ---------- Roadmap list ---------- */
@@ -1889,6 +2110,7 @@
       currentRoadmapId = rmId;
       const rm = ROADMAPS[rmId];
       const lay = layoutRoadmap(rmId);
+      currentLay = lay;
       const d = doneSet(rmId);
       const p = progressOf(rmId);
       const nextNode = lay.nodes.find(n => !d.has(n.id));
@@ -1899,9 +2121,16 @@
       }).join("");
       const spinePaths = lay.spine.map(s => `<path class="spine" d="M ${s.x} ${s.y1} L ${s.x} ${s.y2}"/>`).join("");
 
-      const nodeDivs = lay.nodes.map(n => `
+      const phaseIds = {};
+      lay.nodes.forEach(n => { const pi = n.id.split("/")[1]; (phaseIds[pi] = phaseIds[pi] || []).push(n.id); });
+      const nodeDivs = lay.nodes.map(n => {
+        const pi = n.id.split("/")[1];
+        const chip = n.cls === "main"
+          ? `<span class="phase-chip">${phaseIds[pi].filter(i => d.has(i)).length}/${phaseIds[pi].length}</span>` : "";
+        return `
     <button class="rm-node ${n.cls}${d.has(n.id) ? " done" : ""}" data-node="${n.id}"
-      style="left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px">${esc(n.t)}</button>`).join("");
+      style="left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px">${esc(n.t)}${chip}</button>`;
+      }).join("");
 
       app.innerHTML = `<div class="wrap">
     <div class="rm-head">
@@ -1945,7 +2174,7 @@
         saveDone(rmId, new Set()); renderRoadmap(rmId); armMotion(); toast("Progress reset");
       });
       const nsb = document.getElementById("nextStepBtn");
-      if (nsb) nsb.addEventListener("click", () => openDrawer(rmId, nextNode.id, nextNode.phase, nextNode.node));
+      if (nsb) nsb.onclick = () => openDrawer(rmId, nextNode.id, nextNode.phase, nextNode.node);
     }
 
     function refreshProgressUI() {
@@ -1992,8 +2221,11 @@
       saveDone(currentNode.rmId, d);
       const el = app.querySelector(`[data-node="${CSS.escape(currentNode.nodeId)}"]`);
       if (el) el.classList.toggle("done", !was);
-      updateDoneBtn(); refreshProgressUI();
-      if (!was) toast("Nice — step done. Keep going!");
+      updateDoneBtn(); refreshProgressUI(); updateRoadmapUI();
+      if (!was) {
+        if (progressOf(currentNode.rmId).pct === 100) celebrate();
+        else toast("Nice — step done. Keep going!");
+      }
     });
     function closeDrawer() { drawer.classList.remove("open"); backdrop.classList.remove("open") }
     document.getElementById("drawerClose").addEventListener("click", closeDrawer);
@@ -2005,7 +2237,9 @@
       if (quizState.step >= QUIZ.length) { return renderQuizResult() }
       const q = QUIZ[quizState.step];
       const sel = quizState.answers[q.key];
-      app.innerHTML = `<div class="wrap quiz-shell">
+      const anim = renderQuiz._last !== quizState.step;
+      renderQuiz._last = quizState.step;
+      app.innerHTML = `<div class="wrap quiz-shell${anim ? " quiz-anim" : ""}">
     <p class="eyebrow">Career assessment · demo</p>
     <div class="quiz-progress">${QUIZ.map((_, i) => `<span class="${i <= quizState.step ? "on" : ""}"></span>`).join("")}</div>
     <div class="quiz-q">${esc(q.q)}</div>
@@ -2055,7 +2289,7 @@
           <h3 style="margin:0">${i + 1}. ${esc(c.name)}</h3>
           <span class="result-match">${band(c.score)}</span>
         </div>
-        <div class="match-bar"><div class="match-fill" style="width:${c.score}%"></div></div>
+        <div class="match-bar"><div class="match-fill" data-w="${c.score}" style="width:0%"></div></div>
         <div class="facts">
           <span>typical salary ${esc(c.salary)} (sample)</span><span>training ${esc(c.train)}</span>
         </div>
@@ -2074,6 +2308,7 @@
       document.getElementById("retake").addEventListener("click", () => {
         quizState = { step: 0, answers: {} }; renderQuiz();
       });
+      requestAnimationFrame(() => document.querySelectorAll(".match-fill").forEach(f => { f.style.width = f.dataset.w + "%"; }));
     }
 
     /* ---------- Partners ---------- */
